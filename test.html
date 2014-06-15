@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--
+  Copyright(c) 2014 Suphanut Jamonnak, Dr.En Cheng
+  Data Integration Spring 2014 - UAtilize Project
+-->
+<html>
+  <head>
+    <meta charset="UTF-8">
+
+    <title>UAtilize: Class Utilization</title>
+
+    <link rel="stylesheet" href="css/ithing.css" type="text/css" />
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    
+    <script type="text/javascript">
+      google.load('visualization', '1', { packages: ['table'] });
+
+      function drawTable() {
+        var query = "SELECT Bldg_Name as Building, SUM(Student_Count) as Enrolling"+
+            " FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
+
+        var Building = document.getElementById('Building').value;
+
+        // Days Variables:
+        var Monday = document.getElementById('Monday').value;
+        var Tuesday = document.getElementById('Tuesday').value;
+        var Wednesday = document.getElementById('Wednesday').value;
+        var Thursday = document.getElementById('Thursday').value;
+        var Friday = document.getElementById('Friday').value;
+        var Saturday = document.getElementById('Saturday').value;
+        var Sunday = document.getElementById('Sunday').value;
+
+        if (Building) {
+          query += " WHERE Bldg_Name = '" + Building + "'";//AND Meeting_Time_Start >= '9:15 AM' AND Meeting_Time_End <= '10:30 AM'";
+        }
+
+        // Adapting Class Days ... check condition:
+        if (Monday) {if(!Building){query += " WHERE Mon ='"+ Monday +"'";}else{query += " AND Mon ='"+ Monday +"'";}}
+        if (Tuesday){if(!Building && !Monday){query += " WHERE Tues ='"+ Tuesday +"'";}else{query += " AND Tues ='"+ Tuesday +"'";}}
+        if (Wednesday){if(!Building && !Monday && !Tuesday){query += " WHERE Wed ='"+ Wednesday +"'";}else{
+            query += " AND Wed ='"+ Wednesday +"'";}}
+        if (Thursday){if(!Building && !Monday && !Tuesday && !Wednesday){query += " WHERE Thurs ='"+ Thursday +"'";}else{ query += " AND Thurs ='"+ Thursday +"'";}}
+        if (Friday){if(!Building && !Monday && !Tuesday && !Wednesday && !Thursday){query += " WHERE Fri ='"+ Friday +"'";}else{ query += " AND Fri ='"+ Friday +"'";}}
+        if (Saturday){if(!Building && !Monday && !Tuesday && !Wednesday && !Thursday && !Friday){query += " WHERE Sat ='"+ Saturday +"'";}else{ query += " AND Sat ='"+ Saturday +"'";}}
+        if (Sunday){if(!Building && !Monday && !Tuesday && !Wednesday && !Thursday && !Friday && !Saturday){query += " WHERE Sun ='"+ Sunday +"'";}else{ query += " AND Sun ='"+ Sunday +"'";}}
+
+
+        // GROUP BY Building name
+        query += " GROUP BY 'Bldg_Name'";
+        var queryText = encodeURIComponent(query);
+        var gvizQuery = new google.visualization.Query(
+            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+
+        gvizQuery.send(function(response) {
+          var table = new google.visualization.Table(
+              document.getElementById('visualization'));
+          table.draw(response.getDataTable(), {
+            showRowNumber: true
+          });
+        });
+      }
+
+      google.setOnLoadCallback(drawTable);
+    </script>
+
+
+  </head>
+  <body>
+    <font face="cambria">
+    <div>
+      <label><b>Building Name:</b></label>
+      <select id="Building" onchange="drawTable();">
+        <option value="">All</option>
+        <option value="AYER HALL">AYER HALL</option>
+        <option value="Auburn Science and Engineering Ctr.">Auburn Science and Engineering Ctr.</option>
+        <option value="Bierce Library�">Bierce Library</option>
+        <option value="Buckingham Building">Buckingham Building</option>
+        <option value="Business Administration Building">Business Administration Building</option>
+        <option value="Center For Child Development">Center For Child Development</option>
+        <option value="College of Arts and Sciences">College of Arts and Sciences</option>
+        <option value="Crouse Hall">Crouse Hall</option>
+        <option value="E.J. Thomas Performing Arts Hall">E.J. Thomas Performing Arts Hall</option>
+        <option value="Folk Hall">Folk Hall</option>
+        <option value="Goodyear Polymer Center�">Goodyear Polymer Center</option>
+        <option value="Guzzetta Hall">Guzzetta Hall</option>
+        <option value="James A. Rhodes Health and PE">James A. Rhodes Health and PE</option>
+        <option value="Knight Chemical Laboratory">Knight Chemical Laboratory</option>
+        <option value="Kolbe Hall">Kolbe Hall</option>
+        <option value="Leigh Hall">Leigh Hall</option>
+        <option value="Louis and Freda Stile Athletic Field House�">Louis and Freda Stile Athletic Field House</option>
+        <option value="Mary Gladwin Hall�">Mary Gladwin Hall</option>
+        <!--
+        McDowell Law Center�
+        Ocasek Natatorium
+        Olin Hall
+        Polsky Building
+        Polymer Engineering Academic Center�
+        Schrank Hall (North)�
+        Schrank Hall (South)
+        Simmons Hall
+        Student Recreation and Wellness Ctr
+        Student Union
+        U/A @ Wadsworth High School
+        West Hall
+        Whitby Hall�
+        Zook Hall-->
+      </select>
+      <form>
+              <label><b>Days Filter</b></label><br>
+              <label>Mon:</label><select id="Monday" onchange="drawTable();"><option value="">All</option>
+              <option value="Y">Yes</option><option value="N">No</option></select>
+              <label>Tues:</label><select id="Tuesday" onchange="drawTable();"><option value="">All</option>
+              <option value="Y">Yes</option><option value="N">No</option></select>
+              <label>Wed:</label><select id="Wednesday" onchange="drawTable();"><option value="">All</option>
+              <option value="Y">Yes</option><option value="N">No</option></select>
+              <label>Thus:</label><select id="Thursday" onchange="drawTable();"><option value="">All</option>
+              <option value="Y">Yes</option><option value="N">No</option></select>
+              <label>Fri:</label><select id="Friday" onchange="drawTable();"><option value="">All</option>
+              <option value="Y">Yes</option><option value="N">No</option></select>
+              <label>Sat:</label><select id="Saturday" onchange="drawTable();"><option value="">All</option>
+              <option value="Y">Yes</option><option value="N">No</option></select>
+              <label>Sun:</label><select id="Sunday" onchange="drawTable();"><option value="">All</option>
+              <option value="Y">Yes</option><option value="N">No</option></select>
+      </form>
+        <label><b>Hours Filter:</b></label><br><br>
+        <div id="slider" style="width:50%;"></div><br><br>
+        <b>Start: <input type="text" id="Start"> End: <input type="text" id="End"></b><br>
+    </div>
+    <!-- Draw Google Tables -->
+    <div id="visualization" style="width:70%;"></div>
+    </font>
+  </body>
+
+      <script src="./js/jquery-1.7.1.js"></script>
+      <script src="./js/jquery-ui-1.10.4.custom.js"></script>
+      <script src="./js/jQDateRangeSlider-min.js"></script>
+      <script src="./js/jQRangeSlider-min.js"></script>
+      <script>
+        // Time Adapter ...
+      function TwoDigits(val){ if (val < 10){ return "0" + val;} return val;}
+      function AMPM(val){if(val<12){return "AM";} return "PM";}
+      $("#slider").dateRangeSlider({ bounds: {min: new Date(2014, 0, 1), max: new Date(2014, 0, 1, 23, 59, 59)}, defaultValues: {min: new Date(2014, 0, 1, 10), max: new Date(2014, 0, 1, 13)}, formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return TwoDigits(hours) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
+        step:{minutes: 1}});
+
+      $('#slider').on("userValuesChanged",function (e, data){
+        var minHour = data.values.min.getHours(),
+        minMinutes = data.values.min.getMinutes(),
+        maxHour = data.values.max.getHours(),
+        maxMinutes = data.values.max.getMinutes()
+        finalMin = " " + (minHour < 10 ? "0" + minHour : minHour) + ":" + (minMinutes < 10 ? "0" + minMinutes : minMinutes) +" "+AMPM(minHour),
+        finalMax = " " + (maxHour < 10 ? "0" + maxHour : maxHour) + ":" + (maxMinutes < 10 ? "0" + maxMinutes : maxMinutes) +" "+AMPM(maxHour);
+    jQuery("#Start").val(finalMin);
+    jQuery("#End").val(finalMax); });
+      </script>
+</html>
+<!---
+ var query = "SELECT Bldg_Name, SUM(Student_Count)  FROM " +
+            "18TOgNuPcj8Ty5j1NZE55YEtEh99XM120K_4e_gLK GROUP BY Bldg_Name";
+        var encodedQuery = encodeURIComponent(query);
+
+        // Construct the URL
+        var url = ['https://www.googleapis.com/fusiontables/v1/query'];
+        url.push('?sql=' + encodedQuery);
+        url.push('&key=AIzaSyBhfpozoa6nKtmjdbkuQtiS3CUILG-uPfo');
+        url.push('&callback=?'); -->
