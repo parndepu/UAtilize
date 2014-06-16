@@ -9,7 +9,7 @@
 
     <title>UAtilize: Class Utilization</title>
 
-    <link rel="stylesheet" href="http://parndepu.github.io/UAtilize/css/iThing.css" type="text/css" />
+    <link rel="stylesheet" href="css/ithing.css" type="text/css" />
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     
     <script type="text/javascript">
@@ -30,9 +30,14 @@
         var Saturday = document.getElementById('Saturday').value;
         var Sunday = document.getElementById('Sunday').value;
 
+        // Hours Variables:
+        var Start = document.getElementById('Start').value;
+        var End = document.getElementById('End').value;
+
         if (Building) {
           query += " WHERE Bldg_Name = '" + Building + "'";//AND Meeting_Time_Start >= '9:15 AM' AND Meeting_Time_End <= '10:30 AM'";
         }
+
 
         // Adapting Class Days ... check condition:
         if (Monday) {if(!Building){query += " WHERE Mon ='"+ Monday +"'";}else{query += " AND Mon ='"+ Monday +"'";}}
@@ -45,6 +50,16 @@
         if (Sunday){if(!Building && !Monday && !Tuesday && !Wednesday && !Thursday && !Friday && !Saturday){query += " WHERE Sun ='"+ Sunday +"'";}else{ query += " AND Sun ='"+ Sunday +"'";}}
 
 
+
+        // Adapting Class Hours ...
+        if (Start && End){
+          if(!Building && !Monday && !Tuesday && !Wednesday && !Thursday && !Friday && !Saturday && !Sunday){
+            query += " WHERE Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+          }else{
+            query += " AND Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+          }
+        }
+  
         // GROUP BY Building name
         query += " GROUP BY 'Bldg_Name'";
         var queryText = encodeURIComponent(query);
@@ -124,42 +139,47 @@
       </form>
         <label><b>Hours Filter:</b></label><br><br>
         <div id="slider" style="width:50%;"></div><br><br>
-        <b>Start: <input type="text" id="Start"> End: <input type="text" id="End"></b><br>
+        From: <input type="text" id="Start"> 
+        To: <input type="text" id="End"><br>
     </div>
     <!-- Draw Google Tables -->
     <div id="visualization" style="width:70%;"></div>
     </font>
   </body>
 
-      <script src="http://parndepu.github.io/UAtilize/js/jquery-1.7.1.js"></script>
-      <script src="http://parndepu.github.io/UAtilize/js/jquery-ui-1.10.4.custom.js"></script>
-      <script src="http://parndepu.github.io/UAtilize/js/jQDateRangeSlider-min.js"></script>
-      <script src="http://parndepu.github.io/UAtilize/js/jQRangeSlider-min.js"></script>
+      <script src="./js/jquery-1.7.1.js"></script>
+      <script src="./js/jquery-ui-1.10.4.custom.js"></script>
+      <script src="./js/jQDateRangeSlider-min.js"></script>
+      <script src="./js/jQRangeSlider-min.js"></script>
       <script>
         // Time Adapter ...
+      
       function TwoDigits(val){ if (val < 10){ return "0" + val;} return val;}
+      function set(val){if(val>=13){return val-12;}return val;}
       function AMPM(val){if(val<12){return "AM";} return "PM";}
-      $("#slider").dateRangeSlider({ bounds: {min: new Date(2014, 0, 1), max: new Date(2014, 0, 1, 23, 59, 59)}, defaultValues: {min: new Date(2014, 0, 1, 10), max: new Date(2014, 0, 1, 13)}, formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return TwoDigits(hours) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
+      
+      starttime = new Date(2014, 0, 1,0);
+      endtime = new Date(2014, 0,1,23,59,59);
+
+      $("#slider").dateRangeSlider({ arrows: false, bounds: {min:starttime, max:endtime}, defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)}, formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
         step:{minutes: 1}});
 
       $('#slider').on("userValuesChanged",function (e, data){
         var minHour = data.values.min.getHours(),
         minMinutes = data.values.min.getMinutes(),
         maxHour = data.values.max.getHours(),
-        maxMinutes = data.values.max.getMinutes()
-        finalMin = " " + (minHour < 10 ? "0" + minHour : minHour) + ":" + (minMinutes < 10 ? "0" + minMinutes : minMinutes) +" "+AMPM(minHour),
-        finalMax = " " + (maxHour < 10 ? "0" + maxHour : maxHour) + ":" + (maxMinutes < 10 ? "0" + maxMinutes : maxMinutes) +" "+AMPM(maxHour);
-    jQuery("#Start").val(finalMin);
-    jQuery("#End").val(finalMax); });
+        maxMinutes = data.values.max.getMinutes(),
+        value1 = set(minHour),
+        value2 = set(maxHour)
+
+        finalMin = " " + (minHour < 10 ? "0" + value1 : value1) + ":" + (minMinutes < 10 ? "0" + minMinutes : minMinutes) +" "+AMPM(minHour),
+        finalMax = " " + (maxHour < 10 ? "0" + value2 : value2) + ":" + (maxMinutes < 10 ? "0" + maxMinutes : maxMinutes) +" "+AMPM(maxHour);
+        jQuery("#Start").val(finalMin)
+        jQuery("#End").val(finalMax); });
+
+      $("#slider").on("userValuesChanged", function(e, data){
+          drawTable();
+      });
+
       </script>
 </html>
-<!---
- var query = "SELECT Bldg_Name, SUM(Student_Count)  FROM " +
-            "18TOgNuPcj8Ty5j1NZE55YEtEh99XM120K_4e_gLK GROUP BY Bldg_Name";
-        var encodedQuery = encodeURIComponent(query);
-
-        // Construct the URL
-        var url = ['https://www.googleapis.com/fusiontables/v1/query'];
-        url.push('?sql=' + encodedQuery);
-        url.push('&key=AIzaSyBhfpozoa6nKtmjdbkuQtiS3CUILG-uPfo');
-        url.push('&callback=?'); -->
