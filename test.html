@@ -201,7 +201,7 @@
       starttime = new Date(2014, 0, 1,0);
       endtime = new Date(2014, 0,1,23,59,59);
 
-      $("#slider").dateRangeSlider({ arrows: false, bounds: {min:starttime, max:endtime}, defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)}, formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
+      $("#slider").dateRangeSlider({ bounds: {min:starttime, max:endtime}, defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)}, formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
         step:{minutes: 1}});
 
       $('#slider').on("userValuesChanged",function (e, data){
