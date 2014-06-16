@@ -200,32 +200,23 @@
       
       starttime = new Date(2014, 0, 1,0);
       endtime = new Date(2014, 0,1,23,59,59);
-  
+      var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
       $("#slider").dateRangeSlider({ bounds: {min:starttime, max:endtime}, 
       defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)}, 
       formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
-      scales: [
-      // Primary scale
-      {
-          first: function(val){ return hours; },
-          next: function(val){ return hours + 10; },
-          stop: function(val){ return false; },
-          label: function(val){ return hours; },
-          format: function(tickContainer, tickStart, tickEnd){ 
-          tickContainer.addClass("myCustomClass");
-      }
+      scales: [{
+      first: function(value){ return value; },
+      end: function(value) {return value; },
+      next: function(value){
+        var next = new Date(value);
+        return new Date(next.setMonth(value.getMonth() + 1));
       },
-      // Secondary scale
-      {
-          first: function(val){ return val; },
-          next: function(val){
-          if (val % 10 === 9){
-          return val + 2;
-      }
-          return val + 1;
+      label: function(value){
+        return months[value.getMonth()];
       },
-        stop: function(val){ return false; },
-        label: function(){ return null; }
+      format: function(tickContainer, tickStart, tickEnd){
+        tickContainer.addClass("myCustomClass");
+      }
       }],
       step:{minutes: 1}});
 
