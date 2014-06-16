@@ -207,24 +207,24 @@
       scales: [
       // Primary scale
       {
-          first: function(hours){ return hours; },
-          next: function(hours){ return hours + 10; },
-          stop: function(hours){ return false; },
-          label: function(hours){ return hours; },
+          first: function(val){ return hours; },
+          next: function(val){ return hours + 10; },
+          stop: function(val){ return false; },
+          label: function(val){ return hours; },
           format: function(tickContainer, tickStart, tickEnd){ 
           tickContainer.addClass("myCustomClass");
       }
       },
       // Secondary scale
       {
-          first: function(minutes){ return val; },
-          next: function(minutes){
+          first: function(val){ return val; },
+          next: function(val){
           if (val % 10 === 9){
           return val + 2;
       }
           return val + 1;
       },
-        stop: function(minutes){ return false; },
+        stop: function(val){ return false; },
         label: function(){ return null; }
       }],
       step:{minutes: 1}});
