@@ -189,7 +189,7 @@
 
       <script src="http://parndepu.github.io/UAtilize/js/jquery-1.7.1.js"></script>
       <script src="http://parndepu.github.io/UAtilize/js/jquery-ui-1.10.4.custom.js"></script>
-      <script src="http://parndepu.github.io/UAtilize/js/jQDateRangeSlider-withRuler-min.js"></script>
+      <script src="http://parndepu.github.io/UAtilize/js/jQDateRangeSlider-min.js"></script>
       <script src="http://parndepu.github.io/UAtilize/js/jQRangeSlider-min.js"></script>
       <script>
         // Time Adapter ...
@@ -204,20 +204,6 @@
       $("#slider").dateRangeSlider({ bounds: {min:starttime, max:endtime}, 
       defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)}, 
       formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
-      scales: [{
-      first: function(value){ return value; },
-      end: function(value) {return value; },
-      next: function(value){
-        var next = new Date(value);
-        return new Date(next.setMonth(value.getMonth() + 1));
-      },
-      label: function(value){
-        return months[value.getMonth()];
-      },
-      format: function(tickContainer, tickStart, tickEnd){
-        tickContainer.addClass("myCustomClass");
-      }
-      }],
       step:{minutes: 1}});
 
       $('#slider').on("userValuesChanged",function (e, data){
