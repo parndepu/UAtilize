@@ -201,29 +201,7 @@
       starttime = new Date(2014, 0, 1,0);
       endtime = new Date(2014, 0,1,23,59,59);
   
-      $("#slider").dateRangeSlider( scales: [
-  // Primary scale
-  {
-    first: function(val){ return val; },
-    next: function(val){ return val + 10; },
-    stop: function(val){ return false; },
-    label: function(val){ return val; },
-    format: function(tickContainer, tickStart, tickEnd){ 
-      tickContainer.addClass("myCustomClass");
-    }
-  },
-  // Secondary scale
-  {
-    first: function(val){ return val; },
-    next: function(val){
-      if (val % 10 === 9){
-        return val + 2;
-      }
-      return val + 1;
-    },
-    stop: function(val){ return false; },
-    label: function(){ return null; }
-  }],bounds: {min:starttime, max:endtime}, defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)}, formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
+      $("#slider").dateRangeSlider({ scales:bounds: {min:starttime, max:endtime}, defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)}, formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
         step:{minutes: 1}});
 
       $('#slider').on("userValuesChanged",function (e, data){
