@@ -217,11 +217,6 @@
         jQuery("#Start").val(finalMin)
         jQuery("#End").val(finalMax); });
       
-      $("#slider").rangeSlider({
-          symmetricPositionning: true,
-          range: {min: 0}  
-      });
-      
       $("#slider").on("userValuesChanged", function(e, data){
           drawTable();
       });
