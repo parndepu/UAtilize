@@ -145,7 +145,7 @@
                     var infowindow =  new google.maps.InfoWindow({content: message })
                     var marker =  new google.maps.Marker({
                                   position: point,
-                                  map: map, icon: drawBubbles(data.getValue(row,3)) });
+                                  map: map });
                     google.maps.event.addListener(marker);
 
             }
