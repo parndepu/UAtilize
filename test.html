@@ -121,7 +121,16 @@
                                         mapTypeControl: false,
                                         streetViewControl: false
         });
-        var style = [{"featureType": "road.local","elementType": "geometry","stylers": [{ "hue": "#00ff22" },{ "weight": 2.2 }]},{"featureType": "road.highway","elementType": "geometry","stylers": [{ "hue": "#ff0011" }]},{"featureType": "road.arterial","elementType": "geometry","stylers": [{ "weight": 3.2 },{ "color": "#30713d" }]},{"featureType": "road.arterial","stylers": [{ "invert_lightness": true },{ "hue": "#00ff4d" }]},{"featureType": "water","stylers": [{ "hue": "#2200ff" }]},{"featureType": "landscape.man_made","elementType": "geometry","stylers": [{ "weight": 0.1 },{ "invert_lightness": true },{ "hue": "#1900ff" }]},{"featureType": "poi.school","elementType": "geometry","stylers": [{ "color": "#B9F2BE" }]},{"featureType": "poi","stylers": [{ "invert_lightness": true },{ "hue": "#00ccff" }]},{"featureType": "landscape"  },{"featureType": "poi.school","stylers": [{ "weight": 8 }]}];
+        var style = [
+          {"featureType": "road.local","elementType": "geometry","stylers": [{ "hue": "#00ff22" },{ "weight": 2.2 }]},
+          {"featureType": "road.highway","elementType": "geometry","stylers": [{ "hue": "#ff0011" }]},
+          {"featureType": "road.arterial","elementType": "geometry","stylers": [{ "weight": 3.2 },{ "color": "#30713d" }]},
+          {"featureType": "road.arterial","stylers": [{ "invert_lightness": true },{ "hue": "#00ff4d" }]},
+          {"featureType": "water","stylers": [{ "hue": "#2200ff" }]},{"featureType": "landscape.man_made","elementType": "geometry","stylers": [{ "weight": 0.1 },{ "invert_lightness": true },{ "hue": "#1900ff" }]},
+          {"featureType": "poi.school","elementType": "geometry","stylers": [{ "color": "#B9F2BE" }]},
+          {"featureType": "poi","stylers": [{ "invert_lightness": true },{ "hue": "#00ccff" }]},
+          {"featureType": "landscape"  },
+          {"featureType": "poi.school","stylers": [{ "weight": 8 }]}];
             var styledMapType = new google.maps.StyledMapType(style, {
                             map: map,
                             name: 'Styled Map'
