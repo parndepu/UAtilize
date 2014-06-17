@@ -6,7 +6,7 @@
 <html>
   <head>
     <style>
-    #map-canvas { width:620px; height:600px; }
+    #map-canvas { width:550px; height:400px; }
     .layer-wizard-search-label { font-family: sans-serif };
 
     #content{
@@ -14,23 +14,12 @@
       font-size: 11px;
     }
     
-    
-    #map { width:100%; height:100%; }
-    
-        .label { 
-      position: relative; 
-      left: -50%; top: -8px; 
-      white-space: nowrap; 
-      color: white; font-family: Helvetica;
-      font-size:9pt; z-index:1000;
-      text-shadow: 1px 1px 10px #000; 
-    }
     </style>
     <meta charset="UTF-8">
 
     <title>UAtilize: Class Utilization</title>
 
-    <link rel="stylesheet" href="http://parndepu.github.io/UAtilize/css/iThing.css" type="text/css" />
+    <link rel="stylesheet" href="http://parndepu.github.io/UAtilize/css/classic.css" type="text/css" />
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -40,19 +29,12 @@
       
       google.setOnLoadCallback(drawTable);
       function drawTable() {
-        var query = "SELECT latitude as Lat, longitude as Lng, Bldg_Name as Building, SUM(Student_Count) as Enrolling"+
-            " FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
+        var query = "SELECT latitude as Lat, longitude as Lng, Bldg_Name as Building_Name, Bldg_Img, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
 
         var Building = document.getElementById('Building').value;
 
         // Days Variables:
-        var Monday = document.getElementById('Monday').value;
-        var Tuesday = document.getElementById('Tuesday').value;
-        var Wednesday = document.getElementById('Wednesday').value;
-        var Thursday = document.getElementById('Thursday').value;
-        var Friday = document.getElementById('Friday').value;
-        var Saturday = document.getElementById('Saturday').value;
-        var Sunday = document.getElementById('Sunday').value;
+        var daySelector = document.getElementById('daySelector').value;
 
         // Hours Variables:
         var Start = document.getElementById('Start').value;
@@ -62,34 +44,29 @@
           query += " WHERE Bldg_Name = '" + Building + "'";//AND Meeting_Time_Start >= '9:15 AM' AND Meeting_Time_End <= '10:30 AM'";
         }
 
-
-        // Adapting Class Days ... check condition:
-        if (Monday) {if(!Building){query += " WHERE Mon ='"+ Monday +"'";}else{query += " AND Mon ='"+ Monday +"'";}}
-        if (Tuesday){if(!Building && !Monday){query += " WHERE Tues ='"+ Tuesday +"'";}else{query += " AND Tues ='"+ Tuesday +"'";}}
-        if (Wednesday){if(!Building && !Monday && !Tuesday){query += " WHERE Wed ='"+ Wednesday +"'";}else{
-            query += " AND Wed ='"+ Wednesday +"'";}}
-        if (Thursday){if(!Building && !Monday && !Tuesday && !Wednesday){query += " WHERE Thurs ='"+ Thursday +"'";}else{ query += " AND Thurs ='"+ Thursday +"'";}}
-        if (Friday){if(!Building && !Monday && !Tuesday && !Wednesday && !Thursday){query += " WHERE Fri ='"+ Friday +"'";}else{ query += " AND Fri ='"+ Friday +"'";}}
-        if (Saturday){if(!Building && !Monday && !Tuesday && !Wednesday && !Thursday && !Friday){query += " WHERE Sat ='"+ Saturday +"'";}else{ query += " AND Sat ='"+ Saturday +"'";}}
-        if (Sunday){if(!Building && !Monday && !Tuesday && !Wednesday && !Thursday && !Friday && !Saturday){query += " WHERE Sun ='"+ Sunday +"'";}else{ query += " AND Sun ='"+ Sunday +"'";}}
-
-
+        if(daySelector){
+          if(!Building){
+            query += " WHERE "+ daySelector + " = 'Y'";
+          }else{
+            query += " AND "+ daySelector + " = 'Y'";
+          }
+        }
 
         // Adapting Class Hours ...
         if (Start && End){
-          if(!Building && !Monday && !Tuesday && !Wednesday && !Thursday && !Friday && !Saturday && !Sunday){
+          if(!Building && !daySelector){
             query += " WHERE Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
           }else{
             query += " AND Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
           }
         }
         // GROUP BY Building name
-        query += " GROUP BY 'Bldg_Name', 'latitude', 'longitude'";
+        query += " GROUP BY 'Bldg_Name', 'latitude', 'longitude','Bldg_Img'";
 
         var queryText = encodeURIComponent(query);
         var gvizQuery = new google.visualization.Query(
             'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
-
+        // Query for sending to Google Maps framework ...
         var Query = new google.visualization.Query(
             'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
@@ -104,15 +81,18 @@
         Query.send(buildMap);
       }
 
+      var map;
+      var center;
       // Draw Bubbles and Create Google Maps framework ...
       function buildMap(response){
         var data = response.getDataTable();
+
         map = new google.maps.Map(document.getElementById('map-canvas'), {
 
                 center: new google.maps.LatLng(41.076571, -81.514519),
-                zoom: 16,
-                maxZoom: 20,
-                minZoom: 14,
+                zoom: 17,
+                maxZoom: 17,
+                minZoom: 15,
                 zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
                                         position: google.maps.ControlPosition.left_top},
                                         mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -139,18 +119,38 @@
             map.mapTypes.set('map-style', styledMapType);
             map.setMapTypeId('map-style');
 
-            for(var row = 0; row < data.getNumberOfRows(); ++row){
-                    var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
-                    var message = " More details ... ";
-                    var infowindow =  new google.maps.InfoWindow({content: message })
-                    var marker =  new google.maps.Marker({
-                                  position: point,
-                                  map: map });
-                    google.maps.event.addListener(marker);
 
+            
+            for(var row = 0; row < data.getNumberOfRows(); ++row){
+                    var marker = []; var message = []; var images = [];
+                    var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
+                    message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
+                                   "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
+                                   "Student Count= <b>"+data.getValue(row,4)+"</b></center>";
+                    //image[row] = data.getValue(row,3);
+                    var image = 'https://demo.mapsmarker.com/wp-content/uploads/leaflet-maps-marker-icons/home.png'
+                    marker[row] = new google.maps.Marker({
+                                  position: point,
+                                  map: map, icon: image 
+                      });
+                    addInfoWindow(marker[row], message[row]);
+                    google.maps.event.trigger(map, "resize");
+                    center = point;
             }
+            map.setCenter(center);
       }
 
+      function addInfoWindow(marker, message){
+        var info = message;
+        var infoWindow = new google.maps.InfoWindow({
+          content: message
+        });
+        google.maps.event.addListener(marker, 'click', function(){
+          infoWindow.open(map,marker);
+        });
+      }
+
+      /*
       function drawBubbles(magnitude) {
                 return {
                   path: google.maps.SymbolPath.CIRCLE,
@@ -160,19 +160,23 @@
                   strokeColor: 'black',
                   strokeWeight: .5
                 };
-      }
+      }*/
       google.maps.event.addDomListener(window, 'load', buildMap);
-      
+      google.maps.event.addDomListener(window, "resize", function(){
+                  google.maps.event.trigger(map, "resize");
+                  map.setCenter(center);
+      });
+
     </script>
   </head>
   <body>
       <font face="cambria">
       <div style="height:100%">
       <!-- Draw Google Tables -->
-      <div style="width:50%; float:left;">
-                  <label><b>Building Name:</b></label>
+      
+                  <label><b>Select Building: </b></label>
                   <select id="Building" onchange="drawTable();">
-                          <option value="">All</option>
+                          <option value="">All Building</option>
                           <option value="AYER HALL">AYER HALL</option>
                           <option value="Auburn Science and Engineering Ctr.">Auburn Science and Engineering Ctr.</option>
                           <option value="Bierce Library">Bierce Library</option>
@@ -206,34 +210,27 @@
                           <option value="Zook Hall">Zook Hall</option>
                   </select>
                   <form>
-                          <label><b>Days Filter</b></label><br>
-                          <label>Mon:</label><select id="Monday" onchange="drawTable();">
-                          <option value="Y">Yes</option><option value="N">No</option></select>
-                          <label>Tues:</label><select id="Tuesday" onchange="drawTable();">
-                          <option value="Y">Yes</option><option value="N">No</option></select>
-                          <label>Wed:</label><select id="Wednesday" onchange="drawTable();">
-                          <option value="Y">Yes</option><option value="N">No</option></select>
-                          <label>Thus:</label><select id="Thursday" onchange="drawTable();">
-                          <option value="Y">Yes</option><option value="N">No</option></select>
-                          <label>Fri:</label><select id="Friday" onchange="drawTable();">
-                          <option value="Y">Yes</option><option value="N">No</option></select>
-                          <label>Sat:</label><select id="Saturday" onchange="drawTable();">
-                          <option value="Y">Yes</option><option value="N">No</option></select>
-                          <label>Sun:</label><select id="Sunday" onchange="drawTable();">
-                          <option value="Y">Yes</option><option value="N">No</option></select>
+                          <label><b>Select Days: </b></label>
+                          <select id="daySelector" onchange="drawTable();">
+                              <option value=""></option>
+                              <option value="Sun">Sunday</option>
+                              <option value="Mon">Monday</option>
+                              <option value="Tues">Tuesday</option>
+                              <option value="Wed">Wednesday</option>
+                              <option value="Thurs">Thursday</option>
+                              <option value="Fri">Friday</option>
+                              <option value="Sat">Satuarday</option>
+                          </select>
                   </form>
-                  <label><b>Hours Filter</b></label><br><br>
-                  <div id="slider" style="width:100%; z-index:2;"></div><br><br>
-                  From: <input type="text" id="Start"> 
-                  To: <input type="text" id="End"><br>
+                  <label><b>Hours Slider: </b></label>
+                  Start Time: <input type="text" id="Start"> 
+                  End Time: <input type="text" id="End"><br>
+                  <label><b>Time Range Slider Bar:</b></label>
+                  <div id="slider"></div>
+
+                  <div id="map-canvas" style = "width:100%;"></div>
                   <div id="visualization"></div>
-          </div>
-          <div style="width:50%; float:left;">
-            <b>Bubble Charts</b><br><br>
-            <div id="map-canvas" style = "margin-left: 10px; margin-right:10px;">
             
-            </div>
-          </div>
       </div>
       </font>
   </body>
@@ -251,9 +248,11 @@
       
       starttime = new Date(2014, 0, 1,0);
       endtime = new Date(2014, 0,1,23,59,59);
-      var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+     
       $("#slider").dateRangeSlider({ bounds: {min:starttime, max:endtime}, 
-      defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)}, 
+      defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)},
+      //range: {min:starttime, max:endtime},
+      arrows: true,
       formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
       step:{minutes: 1}});
 
