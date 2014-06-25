@@ -31,12 +31,13 @@
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript">
       google.load('visualization', '1', { packages: ['table'] });
+      google.load('visualization', '1', { packages: ['corechart'] });
       
       
       google.setOnLoadCallback(drawTable);
       function drawTable() {
         var query = "SELECT latitude as Lat, longitude as Lng, Bldg_Name as Building_Name, Bldg_Img, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
-
+        var query1 = "SELECT Bldg_Name as Building_Name, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
 
         var Building = document.getElementById('Building').value;
 
@@ -48,14 +49,17 @@
         var End = document.getElementById('End').value;
 
         if (Building) {
-          query += " WHERE Bldg_Name = '" + Building + "'";//AND Meeting_Time_Start >= '9:15 AM' AND Meeting_Time_End <= '10:30 AM'";
+          query += " WHERE Bldg_Name = '" + Building + "'";
+          query1 += " WHERE Bldg_Name = '" + Building + "'";//AND Meeting_Time_Start >= '9:15 AM' AND Meeting_Time_End <= '10:30 AM'";
         }
 
         if(daySelector){
           if(!Building){
             query += " WHERE "+ daySelector + " = 'Y'";
+            query1 += " WHERE "+ daySelector + " = 'Y'";
           }else{
             query += " AND "+ daySelector + " = 'Y'";
+            query1 += " AND "+ daySelector + " = 'Y'";
           }
         }
 
@@ -63,17 +67,23 @@
         if (Start && End){
           if(!Building && !daySelector){
             query += " WHERE Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+            query1 += " WHERE Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
           }else{
             query += " AND Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+            query1 += " AND Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
           }
         }
 
         // GROUP BY Building name
         query += " GROUP BY 'Bldg_Name', 'latitude', 'longitude', 'Bldg_Img'";
+        query1 += " GROUP BY 'Bldg_Name'";
 
+        var queryText1 = encodeURIComponent(query1);
         var queryText = encodeURIComponent(query);
         var gvizQuery = new google.visualization.Query(
-            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
+        var gvizQuery2 = new google.visualization.Query(
+            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
         // Query for sending to Google Maps framework ...
         var Query = new google.visualization.Query(
             'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
@@ -85,10 +95,18 @@
             showRowNumber: true
           });
         });
+
+        gvizQuery2.send(function(response) {
+          var chart = new google.visualization.PieChart(
+              document.getElementById('pieChart'));
+          chart.draw(response.getDataTable(), {
+            title: 'Student Count Percentages',  
+            is3D: true
+          });
+        });
         // Send the query data to build Google Maps
         Query.send(buildMap);
       }
-
       var map;
       var center;
       // Draw Bubbles and Create Google Maps framework ...
@@ -296,7 +314,11 @@
                   <label><b> &nbsp;&nbsp; Hours Slider: </b></label>
                   Start Time: <input type="text" id="Start" disabled> 
                   End Time: <input type="text" id="End" disabled>
-                  <div id="visualization"></div>
+                  <b>
+                  <div id="visualization" style="width:500px;float:left;"></div>
+                  <div id="pieChart" style="width:600px;height:500px;float:left;"></div>
+                  </b>
+
             
       </div>
       </font>
