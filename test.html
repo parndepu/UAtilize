@@ -100,7 +100,10 @@
           var chart = new google.visualization.PieChart(
               document.getElementById('pieChart'));
           chart.draw(response.getDataTable(), {
-            title: 'Student Count Percentages',  
+            title: 'Percentages of Student in each Building',
+            width: 500,
+            height: 400,
+            chartArea: {'width': '100%', 'height': '80%'},
             is3D: true
           });
         });
@@ -315,8 +318,8 @@
                   Start Time: <input type="text" id="Start" disabled> 
                   End Time: <input type="text" id="End" disabled>
                   <b>
-                  <div id="visualization" style="width:500px;float:left;"></div>
-                  <div id="pieChart" style="width:600px;height:500px;float:left;"></div>
+                  <div id="pieChart" style="float:left;"></div>
+                  <div id="visualization" style="width:600px;height:400px;float:left;"></div>
                   </b>
 
             
