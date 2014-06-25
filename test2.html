@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!--
+  Copyright(c) 2014 Suphanut Jamonnak, Dr.En Cheng
+  Data Integration Spring 2014 - UAtilize Project
+-->
+<html>
+  <head>
+    <style>
+    #map-canvas { width:700px; height:400px; }
+    .layer-wizard-search-label { font-family: sans-serif };
+
+    #content{
+      font-family: Helvetica;
+      font-size: 11px;
+    }
+    
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Mobile Friendly -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <title>UAtilize: Class Utilization</title>
+
+    <link rel="stylesheet" href="./css/iThing.css" type="text/css" />
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', { packages: ['table'] });
+      
+      
+      google.setOnLoadCallback(drawTable);
+      function drawTable() {
+        var query = "SELECT Location as Store, SUM(Amount) as TotalAmount"+" FROM 1v4VmBXFUnOGWQH95YJz06dhWh-hBEfKgam4XkESU";
+
+        // Hours Variables:
+        var Start = document.getElementById('Start').value;
+        var End = document.getElementById('End').value;
+
+
+        // GROUP BY Building name
+        query += " GROUP BY 'Location'";
+
+        var queryText = encodeURIComponent(query);
+        var gvizQuery = new google.visualization.Query(
+            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+        // Query for sending to Google Maps framework ...
+        var Query = new google.visualization.Query(
+            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+
+        gvizQuery.send(function(response) {
+          var table = new google.visualization.Table(
+              document.getElementById('visualization'));
+          table.draw(response.getDataTable(), {
+            showRowNumber: true
+          });
+        });
+        // Send the query data to build Google Maps
+        Query.send(buildMap);
+      }
+
+      var map;
+      var center;
+      // Draw Bubbles and Create Google Maps framework ...
+      function buildMap(response){
+        var data = response.getDataTable();
+
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+
+                center: new google.maps.LatLng(41.076571, -81.514519),
+                zoom: 17,
+                maxZoom: 17,
+                minZoom: 15,
+                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
+                                        position: google.maps.ControlPosition.left_top},
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                        //Turn off the map controls as we will be adding our own later.
+                                        panControl: false,
+                                        mapTypeControl: false,
+                                        streetViewControl: false
+        });
+        var style = [
+          {"featureType": "road.local","elementType": "geometry","stylers": [{ "hue": "#00ff22" },{ "weight": 2.2 }]},
+          {"featureType": "road.highway","elementType": "geometry","stylers": [{ "hue": "#ff0011" }]},
+          {"featureType": "road.arterial","elementType": "geometry","stylers": [{ "weight": 3.2 },{ "color": "#30713d" }]},
+          {"featureType": "road.arterial","stylers": [{ "invert_lightness": true },{ "hue": "#00ff4d" }]},
+          {"featureType": "water","stylers": [{ "hue": "#2200ff" }]},{"featureType": "landscape.man_made","elementType": "geometry","stylers": [{ "weight": 0.1 },{ "invert_lightness": true },{ "hue": "#1900ff" }]},
+          {"featureType": "poi.school","elementType": "geometry","stylers": [{ "color": "#B9F2BE" }]},
+          {"featureType": "poi","stylers": [{ "invert_lightness": true },{ "hue": "#00ccff" }]},
+          {"featureType": "landscape"  },
+          {"featureType": "poi.school","stylers": [{ "weight": 8 }]}];
+            var styledMapType = new google.maps.StyledMapType(style, {
+                            map: map,
+                            name: 'Styled Map'
+            });
+
+            map.mapTypes.set('map-style', styledMapType);
+            map.setMapTypeId('map-style');
+
+
+            var marker = []; //var message = []; //var images = [];
+            for(var row = 0; row < data.getNumberOfRows(); ++row){
+                    console.log(data.getValue(row,0)+" "+data.getValue(row,1));
+
+                    switch(data.getValue(row,0)){
+                      case 'Starbucks': console.log("Starbucks"); break;
+                      case 'Union Mkt': console.log("Union Mkt"); break;
+                      default: console.log("catch");
+                    }
+                    var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
+                    //message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
+                    //               "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
+                    //              "Student Count= <b>"+data.getValue(row,4)+"</b></center>";
+                    image[row] = data.getValue(row,3);
+                    var image = 'https://demo.mapsmarker.com/wp-content/uploads/leaflet-maps-marker-icons/home.png'
+                    marker[row] = new google.maps.Marker({
+                                  position: point,
+                                 map: map, icon: image 
+                    });
+                    //addInfoWindow(marker[row], message[row]);
+                    google.maps.event.trigger(map, "resize");
+                    center = point;
+            }
+            map.setCenter(center);
+      }
+
+      function addInfoWindow(marker, message){
+        var info = message;
+        var infoWindow = new google.maps.InfoWindow({
+          content: message
+        });
+        google.maps.event.addListener(marker, 'click', function(){
+          infoWindow.open(map,marker);
+        });
+      }
+
+      /*
+      function drawBubbles(magnitude) {
+                return {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  fillColor: '#FA5858',
+                  fillOpacity: .7,
+                  scale: magnitude/150,
+                  strokeColor: 'black',
+                  strokeWeight: .5
+                };
+      }*/
+      google.maps.event.addDomListener(window, 'load', buildMap);
+      google.maps.event.addDomListener(window, "resize", function(){
+                  google.maps.event.trigger(map, "resize");
+                  map.setCenter(center);
+      });
+
+    </script>
+  </head>
+  <body>
+        <font face="cambria">
+       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+              <div class="container-fluid">
+              <!--Brand and toggle get grouped for better mobile display-->
+              <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="mobile-connection">    <span class="sr-only"> Toggle navigation </span>
+                                    <span class="iconbar"></span>
+                                    <span class="iconbar"></span>
+                                    <span class="iconbar"></span>
+                    </button>
+                    <a class="navbar-brand" href="./home.html"><b><font color="yellow" size="6px">UA</font><font size="5px" color="white">tilize.</font></b></a>
+              </div>
+              <div class="collapse navbar-collapse" id="mobile-connection">
+                    <ul class="nav navbar-nav navbar-left">
+                          <li><a href="./test.html"><b><font size="4px">Classroom</font></b></a></li>
+                          <li class="active"><a href="./test2.html"><b><font size="4px">Zips Card</font></b></a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                          <li><a href="./aboutus.html"><b><font size="4px">Contact Us</font></b></a></li>
+                    </ul>
+              </div>
+              </div>
+      </nav><br><br><br>
+      <div><center>
+          <b><font size="4px"> Zip Card Data Analysis </font></b><br><br>
+      </div></center>
+      <div>
+                  <label><b> Days Slider: </b></label>
+                  Start Date: <input type="text" id="Start1"> 
+                  End Date: <input type="text" id="End1"><br>
+                  <label><b> Hours Slider: </b></label>
+                  Start Time: <input type="text" id="Start"> 
+                  End Time: <input type="text" id="End"><br>
+                  <label><b>Time Range Slider Bar:</b></label>
+                  <b><font color="white"><div id="slider1"></div></font></b><br><br>
+                  <div id="slider"></div><br><br>
+                  <div id="map-canvas"></div>
+                  <div id="visualization"></div>
+            
+      </div>
+      </font>
+  </body>
+
+      <script src="./js/jquery-1.7.1.js"></script>
+      <script src="./js/jquery-ui-1.10.4.custom.js"></script>
+      <script src="./js/jQDateRangeSlider-withRuler-min.js"></script>
+
+      <script>
+        // Time Adapter ...
+      
+      function TwoDigits(val){ if (val < 10){ return "0" + val;} return val;}
+      function set(val){if(val>=13){return val-12;}return val;}
+      function AMPM(val){if(val<12){return "AM";} return "PM";}
+      
+      starttime = new Date(2014, 0, 1,0);
+      endtime = new Date(2014, 0,1,23,59,59);
+     
+      $("#slider").dateRangeSlider({ bounds: {min:starttime, max:endtime}, 
+      defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)},
+      //range: {min:starttime, max:endtime},
+      arrows: true,
+      formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
+      step:{minutes: 1}});
+
+      $('#slider').on("userValuesChanged",function (e, data){
+        var minHour = data.values.min.getHours(),
+        minMinutes = data.values.min.getMinutes(),
+        maxHour = data.values.max.getHours(),
+        maxMinutes = data.values.max.getMinutes(),
+        value1 = set(minHour),
+        value2 = set(maxHour)
+
+        finalMin = " " + (minHour < 10 ? "0" + value1 : value1) + ":" + (minMinutes < 10 ? "0" + minMinutes : minMinutes) +" "+AMPM(minHour),
+        finalMax = " " + (maxHour < 10 ? "0" + value2 : value2) + ":" + (maxMinutes < 10 ? "0" + maxMinutes : maxMinutes) +" "+AMPM(maxHour);
+        jQuery("#Start").val(finalMin)
+        jQuery("#End").val(finalMax); });
+      
+      $("#slider").on("userValuesChanged", function(e, data){
+          drawTable();
+      });
+
+      var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+            $("#slider1").dateRangeSlider({
+              bounds: {min: new Date(2012, 0, 1), max: new Date(2012, 11, 31, 12, 59, 59)},
+              defaultValues: {min: new Date(2012, 1, 10), max: new Date(2012, 4, 22)}, durationIn:1000, durationOut:1000, 
+              scales: [{
+                first: function(value){ return value; },
+                end: function(value) {return value; },
+                next: function(value){
+                  var next = new Date(value);
+                  return new Date(next.setMonth(value.getMonth() + 1));
+                },
+                label: function(value){
+                  return months[value.getMonth()];
+                },
+                format: function(tickContainer, tickStart, tickEnd){
+                  tickContainer.addClass("myCustomClass");
+                }
+              }]
+            });
+
+      // GitHub Linking Example: http://parndepu.github.io/UAtilize/css/iThing.css
+      // parndepu
+      </script>
+</html>

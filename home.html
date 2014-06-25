@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--
+  Copyright(c) 2014 Suphanut Jamonnak, Dr.En Cheng
+  Data Integration Spring 2014 - UAtilize Project
+-->
+<html>
+  <head>
+    <style>
+    #map-canvas { width:550px; height:400px; }
+    .layer-wizard-search-label { font-family: sans-serif };
+
+    #content{
+      font-family: Helvetica;
+      font-size: 11px;
+    }
+    
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Mobile Friendly -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <title>UAtilize: Class Utilization</title>
+
+    <link rel="stylesheet" href="./css/classic.css" type="text/css" />
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', { packages: ['table'] });
+      
+      
+      google.setOnLoadCallback(drawTable);
+      function drawTable() {
+        var query = "SELECT latitude as Lat, longitude as Lng, Bldg_Name as Building_Name, Bldg_Img, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
+
+        var Building = document.getElementById('Building').value;
+
+        // Days Variables:
+        var daySelector = document.getElementById('daySelector').value;
+
+        // Hours Variables:
+        var Start = document.getElementById('Start').value;
+        var End = document.getElementById('End').value;
+
+        if (Building) {
+          if(!daySelector && !Start && !End){
+              query += " WHERE Bldg_Name = '" + Building + "'";
+          }else{
+              query += " AND Bldg_Name = '" + Building +"'";
+          }
+        }
+
+        if(daySelector){
+          if(!Building && !Start && !End){
+            query += " WHERE "+ daySelector + " = 'Y'";
+          }else{
+            query += " AND "+ daySelector + " = 'Y'";
+          }
+        }
+
+        // Adapting Class Hours ...
+        if (Start && End){
+          if(!Building && !daySelector){
+            query += " WHERE Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+          }else{
+            query += " AND Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+          }
+        }
+
+        // GROUP BY Building name
+        query += " GROUP BY 'Bldg_Name', 'latitude', 'longitude', 'Bldg_Img'";
+
+        var queryText = encodeURIComponent(query);
+        var gvizQuery = new google.visualization.Query(
+            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+        // Query for sending to Google Maps framework ...
+        var Query = new google.visualization.Query(
+            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+
+        gvizQuery.send(function(response) {
+          var table = new google.visualization.Table(
+              document.getElementById('visualization'));
+          table.draw(response.getDataTable(), {
+            showRowNumber: true
+          });
+        });
+        // Send the query data to build Google Maps
+        Query.send(buildMap);
+      }
+
+      var map;
+      var center;
+      // Draw Bubbles and Create Google Maps framework ...
+      function buildMap(response){
+        var data = response.getDataTable();
+
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+
+                center: new google.maps.LatLng(41.076571, -81.514519),
+                zoom: 17,
+                maxZoom: 17,
+                minZoom: 15,
+                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
+                                        position: google.maps.ControlPosition.left_top},
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                        //Turn off the map controls as we will be adding our own later.
+                                        panControl: false,
+                                        mapTypeControl: false,
+                                        streetViewControl: false
+        });
+        var style = [
+          {"featureType": "road.local","elementType": "geometry","stylers": [{ "hue": "#00ff22" },{ "weight": 2.2 }]},
+          {"featureType": "road.highway","elementType": "geometry","stylers": [{ "hue": "#ff0011" }]},
+          {"featureType": "road.arterial","elementType": "geometry","stylers": [{ "weight": 3.2 },{ "color": "#30713d" }]},
+          {"featureType": "road.arterial","stylers": [{ "invert_lightness": true },{ "hue": "#00ff4d" }]},
+          {"featureType": "water","stylers": [{ "hue": "#2200ff" }]},{"featureType": "landscape.man_made","elementType": "geometry","stylers": [{ "weight": 0.1 },{ "invert_lightness": true },{ "hue": "#1900ff" }]},
+          {"featureType": "poi.school","elementType": "geometry","stylers": [{ "color": "#B9F2BE" }]},
+          {"featureType": "poi","stylers": [{ "invert_lightness": true },{ "hue": "#00ccff" }]},
+          {"featureType": "landscape"  },
+          {"featureType": "poi.school","stylers": [{ "weight": 8 }]}];
+            var styledMapType = new google.maps.StyledMapType(style, {
+                            map: map,
+                            name: 'Styled Map'
+            });
+
+            map.mapTypes.set('map-style', styledMapType);
+            map.setMapTypeId('map-style');
+
+
+            var marker = []; var message = []; var images = [];
+            for(var row = 0; row < data.getNumberOfRows(); ++row){
+                    console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
+                    var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
+                    message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
+                                   "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
+                                   "Student Count= <b>"+data.getValue(row,4)+"</b></center>";
+                    //image[row] = data.getValue(row,3);
+                    var image = 'https://demo.mapsmarker.com/wp-content/uploads/leaflet-maps-marker-icons/home.png'
+                    marker[row] = new google.maps.Marker({
+                                  position: point,
+                                  map: map, icon: image 
+                      });
+                    addInfoWindow(marker[row], message[row]);
+                    google.maps.event.trigger(map, "resize");
+                    center = point;
+            }
+            map.setCenter(center);
+      }
+
+      function addInfoWindow(marker, message){
+        var info = message;
+        var infoWindow = new google.maps.InfoWindow({
+          content: message
+        });
+        google.maps.event.addListener(marker, 'click', function(){
+          infoWindow.open(map,marker);
+        });
+      }
+
+      /*
+      function drawBubbles(magnitude) {
+                return {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  fillColor: '#FA5858',
+                  fillOpacity: .7,
+                  scale: magnitude/150,
+                  strokeColor: 'black',
+                  strokeWeight: .5
+                };
+      }*/
+      google.maps.event.addDomListener(window, 'load', buildMap);
+      google.maps.event.addDomListener(window, "resize", function(){
+                  google.maps.event.trigger(map, "resize");
+                  map.setCenter(center);
+      });
+
+    </script>
+  </head>
+  <body>
+        <font face="cambria">
+       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+              <div class="container-fluid">
+              <!--Brand and toggle get grouped for better mobile display-->
+              <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="mobile-connection">   <span class="sr-only"> Toggle navigation </span>
+                    </button>
+                    <a class="navbar-brand" href="./home.html"><b><font color="yellow" size="6px">UA</font><font size="5px" color="#0431B4">tilize.</font></b></a>
+              </div>
+              <div class="collapse navbar-collapse" id="mobile-connection">
+                    <ul class="nav navbar-nav navbar-left">
+                          <li><a href="./test.html"><b><font size="4px">Classroom</font></b></a></li>
+                          <li><a href="./test2.html"><b><font size="4px">Zips Card</font></b></a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                          <li><a href="./aboutus.html"><b><font size="4px">Contact Us</font></b></a></li>
+                    </ul>
+              </div>
+              </div>
+      </nav><br><br><br>
+      <div><center>
+          <b><font size="4px">Welcome to UAtilize Project</font></b>
+      </div></center>
+    </font>
+  </body>
+</html>
