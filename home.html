@@ -14,6 +14,13 @@
   
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
+  <style>
+          .ImgCarousel img {
+              width: auto;
+              height: 300px;
+              max-height: 300px;
+          }
+  </style>
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -26,14 +33,31 @@
   <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/apple-touch-icon-72-precomposed.png">
   <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-57-precomposed.png">
   <link rel="shortcut icon" href="img/favicon.png">
-  
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/scripts.js"></script>
+  <script>
+  function equalHeight(group) {    
+    tallest = 0;    
+    group.each(function() {       
+        thisHeight = $(this).height();       
+        if(thisHeight > tallest) {          
+            tallest = thisHeight;       
+        }    
+    });    
+    group.each(function() { $(this).height(tallest); });
+  } 
+
+  $(document).ready(function() {   
+     equalHeight($(".thumbnail")); 
+  });
+  </script>
 </head>
 
 <body >
-<font face="cambria">
+
+<div class="container">
+  
        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
               <div class="container-fluid">
               <!--Brand and toggle get grouped for better mobile display-->
@@ -43,30 +67,32 @@
                                     <span class="iconbar"></span>
                                     <span class="iconbar"></span>
                     </button>
-                    <a class="navbar-brand" href="./home.html"><b><font color="yellow" size="6px">UA</font><font size="5px" color="purple">tilize.</font></b></a>
+                    <a class="navbar-brand" href="./home.html"><b><font color="yellow" size="6px">UA</font><font size="5px" color="blue">tilize.</font></b></a>
               </div>
               <div class="collapse navbar-collapse" id="mobile-connection">
                     <ul class="nav navbar-nav navbar-left">
                           <li><a href="./test.html"><b><font size="4px">Classroom</font></b></a></li>
-                          <li><a href="./test2.html"><b><font size="4px">Zips Card</font></b></a></li>
+                          <!--<li><a href="./#"><b><font size="4px">Zips Card</font></b></a></li>-->
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                          <li><a href="https://docs.google.com/forms/d/12FQy4pX-DRg3NYmrZFPKU8PfJr-r-YCq0BKIkiw7DSw/viewform?usp=send_form"><b><font size="4px">Feedback</font></b></a></li>
+                          <li><a href="./feedback.html"><b><font size="4px">Feedback</font></b></a></li>
                     </ul>
               </div>
               </div>
       </nav><br><br><br>
       <div class="jumbotron">
         <h1>
-          UAtilize Project 
+          <center>{ UAtilize }</center> 
         </h1>
         <p>
           
-           UAtilize provides multiple functions and dynamic visualizations of campus building utilization data and Zipcard transaction data, leveraging the comprehensiveness, accuracy, and usability of Google Maps. UAtilize is capable to integrate and transform geographical data into a map. The primary goal of UAtilize is to assist several departments at The University of Akron, including Registrar Office, Parking and Transportation Services, Police Department, and Auxiliary Business Operations.
+           <b>UAtilize</b> provides multiple functions and dynamic visualizations of campus building utilization data and Zipcard transaction data, leveraging the comprehensiveness, accuracy, and usability of Google Maps. UAtilize is capable to integrate and transform geographical data into a map. The primary <b>goal of UAtilize</b> is to assist several departments at The University of Akron, including Registrar Office, Parking and Transportation Services, Police Department, and Auxiliary Business Operations.
         
         </p>
         <p>
-          <center><a class="btn btn-danger btn-large" href="./test.html">Explore UAtilize Project</a></center>
+          <center><a class="btn btn-danger btn-large" href="./test.html">
+          <font size="4px">
+          Explore UAtilize Project »</font></a></center>
         </p>
       </div>
     </div>
@@ -84,7 +110,7 @@
         </ol>
         <div class="carousel-inner">
           <div class="item active">
-            <img alt="" src="./img/1.PNG">
+            <img alt="" src="./img/1.png" class="ImgCarousel">
             <div class="carousel-caption">
               <h4>
                 
@@ -95,7 +121,7 @@
             </div>
           </div>
           <div class="item">
-            <img alt="" src="./img/2.PNG">
+            <img alt="" src="./img/2.png" class="ImgCarousel">
             <div class="carousel-caption">
               <h4>
                 
@@ -106,7 +132,7 @@
             </div>
           </div>
           <div class="item">
-            <img alt="" src="./img/3.PNG">
+            <img alt="" src="./img/3.png" class="ImgCarousel">
             <div class="carousel-caption">
               <h4>
                 
@@ -124,14 +150,14 @@
     <div class="col-md-12 column">
       <div class="row">
         <div class="col-md-4">
-          <div class="thumbnail">
-            <br><img alt="300x200" src="./img/data integration.png">
+          <div class="thumbnail" style="height:400px;">
+            <br><img width="300" height="150" src="./img/data integration.png">
             <div class="caption">
               <h3>
                 Data Integration
               </h3>
               <p>
-                Data integration involves combining data residing in different sources and providing users with a unified view of these data.
+                UAtilize provides ability to integrate multiple Google services such as Google Fusion Tables and Google Maps with Google APIs. Merging several data tables, can help UAtilize to visualize in-depth information and improve data analysis methods. UAtilize has gathered data visualization and data analysis methodology, in order to provides multiple services to our users. 
               </p>
               <p>
               </p>
@@ -140,7 +166,7 @@
         </div>
         <div class="col-md-4">
           <div class="thumbnail">
-            <br><img width="300" height="1" src="./img/data visualization.png">
+            <br><img width="300" height="150" src="./img/data visualization.png">
             <div class="caption">
               <h3>
                 Data Visualization
@@ -149,7 +175,7 @@
                 Data visualization or data visualisation is a modern branch of descriptive statistics. It involves the creation and study of the visual representation of data, meaning "information that has been abstracted in some schematic form, including attributes or variables for the units of information.
               </p>
               <p>
-                <center><a class="btn btn-primary" href="./test.html">Class Utilization</a>  <a class="btn btn-warning" href="./test2.html">Zips Card Utilization</a></center>
+                <center><a class="btn btn-primary" href="./test.html">Class Utilization</a>  <a class="btn btn-warning" href="./test2.html" disabled>Zips Card Utilization</a></center>
               </p>
             </div>
           </div>
@@ -183,8 +209,8 @@
       </h2>
       <p>
         <font size="4px"><b>Suphanut Jamonnak</b><br></font>
-        Computer Science <br> 
-        University of Akron, OH
+        { sj70@zips.uakron.edu }<br>
+        Computer Science, The University of Akron
       </p>
     </div>
     
@@ -195,26 +221,21 @@
       </h2>
       <p>
         <font size="4px"><b>Nikhil Preeth & <br> Bharani Anne</b><br></font>
+        Computer Science, The University of Akron
       </p>
     </div>
     </center>
   </div>
 </center>
-
+  
   <div class="row clearfix">
     <center><font size="5px">
     <div class="col-md-12 column">
-      <h2>
-        Give us Feedback
-      </h2>
+      <h3>
+        <br>"Give us Feedback"
+      </h3>
       <p>
-        Please feel free to give us feedback! <br>
-        UAtilize project want more improvement<br>
-        Feel free to give any suggestion in the evaluation page at the link below<br>
-        Any comment and feedback could help us to develop more powerful application
-      </p>  
-      <p>
-        <a class="btn" href="./feedback.html">Go to evaluation page »</a>
+        <a class="btn" href="./feedback.html"><font size="5px">Go to Feedback page »</font></a>
       </p>
     </div>
     <center></font>
@@ -222,3 +243,4 @@
 </div></font>
 </body>
 </html>
+
