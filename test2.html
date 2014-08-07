@@ -456,7 +456,7 @@
                 }
                 //var imgURL = 'http://sae.solutionsguide.com/images/vendor_logos/logo-ua-lg_1401193544.jpg';
                 //var imgURL = 'http://maps.googleapis.com/maps/api/streetview?size=1240x800&location='+lat+','+lng;
-                var message = "<center><font size="3px"><b>"+buildingName+"</b></font><br><img src='"+imgURL+"' width='250' height='50'><br><table border='2'><tr><th></center><center>Stores</center></th><th><center>Code</center></th><th><center>Description</center></th><th><center>Total Amount</center></th></tr>";
+                var message = "<center><font size='3px'><b>"+buildingName+"</b></font><br><img src='"+imgURL+"' width='250' height='50'><br><table border='2'><tr><th></center><center>Stores</center></th><th><center>Code</center></th><th><center>Description</center></th><th><center>Total Amount</center></th></tr>";
                 for(var i=0;i<marketMatch.getNumberOfRows();i++){
                   for(var j=0;j<data.getNumberOfRows();j++){
                     if(marketMatch.getValue(i,0) == data.getValue(j,0)){
