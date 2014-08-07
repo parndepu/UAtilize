@@ -448,15 +448,33 @@
         getQuery.send(function(response){ 
                 imgURL = './img/Transaction_Header.jpg'
                 var marketMatch = response.getDataTable();
+                //Student Union
                 if(lat == '41.075409' && lng == '-81.512489'){
                   imgURL = 'https://maps.uakron.edu/img/studentUnion.jpg';
                   buildingName = "Student Union";
-                }else{
+                }else if(lat =='41.07695' && lng == '-81.51027'){
+                  // Bierce Library
+                  imgURL = 'https://maps.uakron.edu/img/bierce.jpg';
+                  buildingName = "Bierce Library";
+                }else if(lat =='41.07775' && lng == '-81.51072'){
+                  // CAS
+                  imgURL = 'https://maps.uakron.edu/img/arts_sci.jpg';
+                  buildingName = "College of Arts & Science";
+                }else if(lat == '41.0746203' && lng == '41.0746203'){
+                  // Rec center
+                  imgURL = 'https://maps.uakron.edu/img/recCenter.jpg';
+                  buildingName = "Student Recreation and Wellness Center";
+                }else if(lat =='41.0778978' && lng == '-81.5129351'){
+                  // Robs Cafe
+                  imgURL = 'https://maps.uakron.edu/img/robertson.jpg';
+                  buildingName = "Robertson Dining Hall";
+                }
+                else{
                   buildingName = "Vendor's Name";
                 }
                 //var imgURL = 'http://sae.solutionsguide.com/images/vendor_logos/logo-ua-lg_1401193544.jpg';
                 //var imgURL = 'http://maps.googleapis.com/maps/api/streetview?size=1240x800&location='+lat+','+lng;
-                var message = "<center><font size='3px'><b>"+buildingName+"</b></font><br><img src='"+imgURL+"' width='250' height='50'><br><table border='2'><tr><th></center><center>Stores</center></th><th><center>Code</center></th><th><center>Description</center></th><th><center>Total Amount</center></th></tr>";
+                var message = "<center><font size='3px'><b>"+buildingName+"</b></font><br><img src='"+imgURL+"' width='250' height='100'><br><table border='2'><tr><th></center><center>Stores</center></th><th><center>Code</center></th><th><center>Description</center></th><th><center>Total Amount</center></th></tr>";
                 for(var i=0;i<marketMatch.getNumberOfRows();i++){
                   for(var j=0;j<data.getNumberOfRows();j++){
                     if(marketMatch.getValue(i,0) == data.getValue(j,0)){
