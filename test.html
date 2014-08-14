@@ -33,11 +33,12 @@
       google.load('visualization', '1', { packages: ['table'] });
       google.load('visualization', '1', { packages: ['corechart'] });
       
-      
       google.setOnLoadCallback(drawTable);
+
       function drawTable() {
         var query = "SELECT latitude as Lat, longitude as Lng, Bldg_Name as Building_Name, Bldg_Img, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
-        var query1 = "SELECT Bldg_Name as Building_Name, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
+
+        var query1 = "SELECT 'Bldg_Name' as Building_Name, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
 
         var Building = document.getElementById('Building').value;
 
@@ -81,12 +82,12 @@
         var queryText1 = encodeURIComponent(query1);
         var queryText = encodeURIComponent(query);
         var gvizQuery = new google.visualization.Query(
-            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
         var gvizQuery2 = new google.visualization.Query(
-            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
         // Query for sending to Google Maps framework ...
         var Query = new google.visualization.Query(
-            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
         gvizQuery.send(function(response) {
           var table = new google.visualization.Table(
@@ -110,6 +111,7 @@
         // Send the query data to build Google Maps
         Query.send(buildMap);
       }
+      
       var map;
       var center;
       // Draw Bubbles and Create Google Maps framework ...
@@ -194,7 +196,7 @@
 
             var marker = []; var message = []; var images = [];
             for(var row = 0; row < data.getNumberOfRows(); ++row){
-                    console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
+                    //console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
                     var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
                     message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
                                    "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
@@ -212,27 +214,162 @@
             map.setCenter(center);
       }
 
+      var infoWindow = null;
       function addInfoWindow(marker, message){
-        var info = message;
+        /*var info = message;
         var infoWindow = new google.maps.InfoWindow({
           content: message
-        });
+        });*/
         google.maps.event.addListener(marker, 'click', function(){
-          infoWindow.open(map,marker);
+          if (infoWindow) {
+                                  infoWindow.close();
+                        }
+                        infoWindow = new google.maps.InfoWindow({
+                        content: message
+                        });
+
+                        infoWindow.open(map,marker);
+                        var center = marker.position;
+                        map.setCenter(center);
         });
       }
 
-      /*
+       function drawTable2() {
+        var query = "SELECT latitude as Lat, longitude as Lng, Bldg_Name as Building_Name, Bldg_Img, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
+
+        var query1 = "SELECT 'Bldg_Name' as Building_Name, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
+
+        var Building = document.getElementById('Building').value;
+
+        // Days Variables:
+        var daySelector = document.getElementById('daySelector').value;
+
+        // Hours Variables:
+        var Start = document.getElementById('Start').value;
+        var End = document.getElementById('End').value;
+
+        if (Building) {
+          query += " WHERE Bldg_Name = '" + Building + "'";
+          query1 += " WHERE Bldg_Name = '" + Building + "'";//AND Meeting_Time_Start >= '9:15 AM' AND Meeting_Time_End <= '10:30 AM'";
+        }
+
+        if(daySelector){
+          if(!Building){
+            query += " WHERE "+ daySelector + " = 'Y'";
+            query1 += " WHERE "+ daySelector + " = 'Y'";
+          }else{
+            query += " AND "+ daySelector + " = 'Y'";
+            query1 += " AND "+ daySelector + " = 'Y'";
+          }
+        }
+
+        // Adapting Class Hours ...
+        if (Start && End){
+          if(!Building && !daySelector){
+            query += " WHERE Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+            query1 += " WHERE Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+          }else{
+            query += " AND Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+            query1 += " AND Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+          }
+        }
+
+        // GROUP BY Building name
+        query += " GROUP BY 'Bldg_Name', 'latitude', 'longitude', 'Bldg_Img'";
+        query1 += " GROUP BY 'Bldg_Name'";
+
+        var queryText1 = encodeURIComponent(query1);
+        var queryText = encodeURIComponent(query);
+        var gvizQuery = new google.visualization.Query(
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
+        var gvizQuery2 = new google.visualization.Query(
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
+        // Query for sending to Google Maps framework ...
+        var Query = new google.visualization.Query(
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+
+        gvizQuery.send(function(response) {
+          var table = new google.visualization.Table(
+              document.getElementById('visualization'));
+          table.draw(response.getDataTable(), {
+            showRowNumber: true
+          });
+        });
+
+        gvizQuery2.send(function(response) {
+          var chart = new google.visualization.PieChart(
+              document.getElementById('pieChart'));
+          chart.draw(response.getDataTable(), {
+            title: 'Percentages of Student in each Building',
+            width: 500,
+            height: 400,
+            chartArea: {'width': '100%', 'height': '80%'},
+            is3D: true
+          });
+        });
+        // Send the query data to build Google Maps
+        Query.send(bubbleCreator);
+      }
+
+      function bubbleCreator(response){
+        var data = response.getDataTable();
+
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+
+                center: new google.maps.LatLng(41.076571, -81.514519),
+                zoom: 17,
+                maxZoom: 17,
+                minZoom: 15,
+                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
+                                        position: google.maps.ControlPosition.left_top},
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                        //Turn off the map controls as we will be adding our own later.
+                                        panControl: false,
+                                        mapTypeControl: false,
+                                        streetViewControl: false
+        });
+        var style = [{"featureType":"all","elementType":"all","stylers":[{"invert_lightness":true},{"saturation":10},{"lightness":30},{"gamma":0.5},{"hue":"#435158"}]}];
+
+            var styledMapType = new google.maps.StyledMapType(style, {
+                            map: map,
+                            name: 'Styled Map'
+            });
+
+            map.mapTypes.set('map-style', styledMapType);
+            map.setMapTypeId('map-style');
+
+
+            var marker = []; var message = []; var images = [];
+            for(var row = 0; row < data.getNumberOfRows(); ++row){
+                    //console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
+                    var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
+                    message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
+                                   "<b>Population: "+data.getValue(row,4)+" students</b></center>";
+                    //image[row] = data.getValue(row,3);
+                    var image = 'http://maps.simcoe.ca/EasyMapTutorial/Images/ScreenCaptures/i_gsv.png'
+                    marker[row] = new google.maps.Marker({
+                                  position: point,
+                                  map: map, icon: drawBubbles(data.getValue(row,4)) 
+                      });
+                    addInfoWindow(marker[row], message[row]);
+                    google.maps.event.trigger(map, "resize");
+                    center = point;
+            }
+            map.setCenter(center);
+      }
+
+      
       function drawBubbles(magnitude) {
                 return {
                   path: google.maps.SymbolPath.CIRCLE,
-                  fillColor: '#FA5858',
+                  fillColor: '#FFFF00',
                   fillOpacity: .7,
                   scale: magnitude/150,
                   strokeColor: 'black',
                   strokeWeight: .5
                 };
-      }*/
+      }
+
       google.maps.event.addDomListener(window, 'load', buildMap);
       google.maps.event.addDomListener(window, "resize", function(){
                   google.maps.event.trigger(map, "resize");
@@ -305,7 +442,7 @@
                           <option value="Zook Hall">Zook Hall</option>
                   </select>
                   <label><b>&nbsp;&nbsp;Select Days: </b></label>
-                          <select id="daySelector" onchange="drawTable();">
+                          <select id="daySelector" onchange="drawTable(info);">
                               <option value=""></option>
                               <option value="Sun">Sunday</option>
                               <option value="Mon">Monday</option>
@@ -317,7 +454,12 @@
                   </select>
                   <label><b> &nbsp;&nbsp; Hours Slider: </b></label>
                   Start Time: <input type="text" id="Start" disabled> 
-                  End Time: <input type="text" id="End" disabled>
+                  End Time: <input type="text" id="End" disabled><br><br>
+                  
+                  <center><b>Select Visualization:</b>&nbsp;&nbsp;&nbsp;
+                  <a class="btn btn-primary btn-large" onclick="drawTable();">
+                  <font size="3px">Information Mode</font></a>&nbsp;&nbsp;&nbsp;
+                  <a class="btn btn-warning btn-large" onclick="drawTable2();"><font size="3px">Bubble Mode</font></a></center><br>
                   <b><center>
                   <div id="pieChart" style="display:inline-block;"></div>
                   <div id="visualization" style="width:600px;height:400px;display:inline-block;"></div>
@@ -332,6 +474,7 @@
       <script src="./js/jquery-ui-1.10.4.custom.js"></script>
       <script src="./js/jQDateRangeSlider-min.js"></script>
       <script src="./js/jQRangeSlider-min.js"></script>
+
       <script>
         // Time Adapter ...
       
