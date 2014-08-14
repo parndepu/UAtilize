@@ -229,6 +229,8 @@
                         });
 
                         infoWindow.open(map,marker);
+                        var center = marker.position;
+                        map.setCenter(center);
         });
       }
 
