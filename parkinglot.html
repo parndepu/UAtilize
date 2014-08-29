@@ -91,11 +91,7 @@
 				var EndingTime = document.getElementById('End').value;
 				
 				if(dayTime){
-					if(!EndingTime){
 						queryRequest += " WHERE Days = '"+ dayTime + "'";
-					}else{
-						queryRequest += " AND Days = '"+ dayTime + "'"; 
-					}
 				}
 				
 				if(EndingTime){
