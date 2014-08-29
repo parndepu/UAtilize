@@ -30,8 +30,15 @@
 			}
 			
 			#side-layout{
+				margin-top:50px;
+				width:40%;
+				height:100%;
 				position:fixed;
-				z-index:2;
+				z-index: 1;
+				top:0;
+				left: 0;
+				background:#fff;
+				padding:20px;
 			}
 			
 			#content{
@@ -132,9 +139,7 @@
 			<div id="map-canvas"></div>
 			
 		</div>
-		
-		<div id="content">
-				<div id="side-layout">
+		<div id="side-layout">
 				<!--Select Days-->
 				<label><b>&nbsp;&nbsp;Select Days: </b></label>
                         	<select id="daySelector" class="form-control" onchange="drawTable(info);">
@@ -159,7 +164,9 @@
                 		<font size="3px">Information Mode</font></a> &nbsp;&nbsp;&nbsp;
                   		<a class="btn btn-warning btn-large" onclick="drawTable2();">
                   		<font size="3px">Bubble Mode</font></a></center>
-                  		</div>
+                </div>
+		<div id="content">
+				Helloworld
 		</div>
 		
 			
