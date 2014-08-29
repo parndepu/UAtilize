@@ -112,8 +112,8 @@
 				var gvizQuery = new google.visualization.Query(
 				'https://www.google.com/fusiontables/gvizdata?tq=' + encodeQuery);
 				
-				console.log(response.getMessage());
 				gvizQuery.send(function(response) {
+				  console.log(response.getMessage());
 			          var table = new google.visualization.Table(
 			              document.getElementById('visualization'));
 			          table.draw(response.getDataTable(), {
