@@ -84,7 +84,7 @@
 			function QueryTotalCars(){
 				console.log("StartQuery5 !!!");
 				
-				var queryRequest = "SELECT LotName as Lot_Name, SUM(TotalCars) as Total"+
+				var queryRequest = "SELECT LotName as Lot_Name"+
 				" FORM 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre";
 				
 				var dayTime = document.getElementById('daySelector').value;
@@ -106,13 +106,14 @@
 					}
 				}*/
 				
-				queryRequest += " GROUP BY 'LotName' ";
+				//queryRequest += " GROUP BY 'LotName' ";
 				
 				var encodeQuery = encodeURIComponent(queryRequest);
 				var gvizQuery = new google.visualization.Query(
 				'https://www.google.com/fusiontables/gvizdata?tq=' + encodeQuery);
 				
 				gvizQuery.send(function(response) {
+					
 				  console.log(response.getMessage());
 			          var table = new google.visualization.Table(
 			              document.getElementById('visualization'));
