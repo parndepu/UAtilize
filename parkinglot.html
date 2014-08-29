@@ -95,6 +95,7 @@
 				" FROM 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre";
 				
 				var dayTime = document.getElementById('daySelector').value;
+				var StartingTime = document.getElementById('Start').value;
 				var EndingTime = document.getElementById('End').value;
 				
 				if(dayTime){
@@ -102,13 +103,15 @@
 						queryRequest2 += " WHERE Days = '"+ dayTime + "'";
 				}
 				
-				if(EndingTime){
+				if(StartingTime && EndingTime){
 					if(!dayTime){
 						queryRequest += " WHERE Time = '"+ EndingTime + "'";
-						queryRequest2 += " WHERE Time = '"+ EndingTime + "'";
+						queryRequest2 += " WHERE Time >= '"+ StartingTime + "'"+
+						" AND Time <= '"+ EndingTime +"'";
 					}else{
 						queryRequest += " AND Time = '"+ EndingTime + "'";
-						queryRequest2 += " AND Time = '"+ EndingTime + "'";
+						queryRequest2 += " AND Time >= '"+ StartingTime + "'"+
+						" AND Time <= '"+ EndingTime +"'";
 						
 					}
 				}
