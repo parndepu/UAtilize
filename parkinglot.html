@@ -71,6 +71,8 @@
 	
 		<script>
 			// Table id: 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre
+			//https://www.crd.bc.ca/images/default-source/parks/icons/parking.png?sfvrsn=2
+			
 			google.load('visualization', '1', { packages: ['table'] });
 		      	google.load('visualization', '1', { packages: ['corechart'] });
 		      
@@ -88,26 +90,38 @@
 				var queryRequest = "SELECT LotName as 'Lot Name',Days,Time as 'At',TotalCars"+
 				" FROM 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre";
 				
+				var queryRequest2 = "SELECT LotNumber,LotName,Latitude,Longitude,Days,SUM(CarsEntered) as Enter,SUM(CarsExited) as Exit"+
+				" FROM 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre";
+				
 				var dayTime = document.getElementById('daySelector').value;
 				var EndingTime = document.getElementById('End').value;
 				
 				if(dayTime){
 						queryRequest += " WHERE Days = '"+ dayTime + "'";
+						queryRequest2 += " WHERE Days = '"+ dayTime + "'";
 				}
 				
 				if(EndingTime){
 					if(!dayTime){
 						queryRequest += " WHERE Time = '"+ EndingTime + "'";
+						queryRequest2 += " WHERE Time = '"+ EndingTime + "'";
 					}else{
 						queryRequest += " AND Time = '"+ EndingTime + "'";
+						queryRequest2 += " AND Time = '"+ EndingTime + "'";
+						
 					}
 				}
 				
-				//queryRequest += " GROUP BY 'LotName' ";
+				queryRequest2 += " GROUP BY 'LotNumber','LotName','Latitude','Longitude','Days'";
 				
 				var encodeQuery = encodeURIComponent(queryRequest);
+				var encodeQuery2 = encodeURIComponent(queryRequest2);
+				
 				var gvizQuery = new google.visualization.Query(
 				'https://www.google.com/fusiontables/gvizdata?tq=' + encodeQuery);
+				var gvizQuery2 = new google.visualization.Query(
+				'https://www.google.com/fusiontables/gvizdata?tq=' + encodeQuery2);
+				
 				
 				gvizQuery.send(function(response) {
 					
@@ -118,10 +132,13 @@
 			            showRowNumber: true
 			          });
 			        });
+			        
+			        gvizQuery.send(initialize)
 			}
 			
 			// Initialize Maps
-			function initialize(){
+			function initialize(response){
+				console.log(response.getMessage());
 				var mapOptions = {
 					zoom:16,
 					maxZoom:17,
