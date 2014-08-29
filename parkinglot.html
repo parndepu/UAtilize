@@ -82,8 +82,8 @@
 			}
 			
 			function QueryTotalCars(){
-				var queryRequest = "SELECT LotName as 'Lot Name', LotNumber as 'Lot Number', TotalCars as 'Total Cars', Time"+
-				"FORM 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre";
+				var queryRequest = "SELECT LotName as Lot_Name, Lot_Number as 'LotNumber', TotalCars as Total_Cars, Time as Time"+
+				" FORM 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre";
 				
 				var dayTime = document.getElementById('daySelector').value;
 				var EndingTime = document.getElementById('End').value;
@@ -100,7 +100,7 @@
 					if(!dayTime){
 						queryRequest += "WHERE Time = '"+ EndingTime + "'" 
 					}else{
-						queryRequest += "AND Time = '"+ EndingTime +"'";
+						queryRequest += "AND Time = '"+ EndingTime + "'";
 					}
 				}
 				
