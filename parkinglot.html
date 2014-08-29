@@ -133,7 +133,12 @@
 		<div id="map-container">
 			<div style="background-color:#CEECF5;">
 			<br>
-				<center><font size="3px"><b>Data Visualization</b></font></center>
+				<font size="3px"><b>Data Visualization: </b></font>
+				<!--Select Visualization Mode-->
+                  		<center><a class="btn btn-primary btn-large" onclick="drawTable();">
+                		<font size="3px">Information Mode</font></a> &nbsp;&nbsp;&nbsp;
+                  		<a class="btn btn-primary btn-large" onclick="drawTable2();">
+                  		<font size="3px">Bubble Mode</font></a></center>
 			<br>
 			<b><font size="2px"><div id="slider"></div></font></b>
 			</div>
@@ -160,11 +165,6 @@
                   		<label><b>&nbsp;&nbsp;Cars Entered Until:</b></label>
                 		<input type="text" id="End" class="form-control" disabled>
                 		<br>
-                		<!--Select Visualization Mode-->
-                  		<center><a class="btn btn-primary btn-large" onclick="drawTable();">
-                		<font size="3px">Information Mode</font></a> &nbsp;&nbsp;&nbsp;
-                  		<a class="btn btn-primary btn-large" onclick="drawTable2();">
-                  		<font size="3px">Bubble Mode</font></a></center>
                 </div>
 		<div id="content">
 				<center><label><b>Data Analysis</b></label></center>
