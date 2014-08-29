@@ -28,6 +28,12 @@
 			#map-canvas{
 				height:88%;
 			}
+			
+			#side-layout{
+				position:fixed;
+				z-index:2;
+			}
+			
 			#content{
 				margin-top:50px;
 				width:40%;
@@ -128,7 +134,7 @@
 		</div>
 		
 		<div id="content">
-		
+				<div id="side-layout">
 				<!--Select Days-->
 				<label><b>&nbsp;&nbsp;Select Days: </b></label>
                         	<select id="daySelector" class="form-control" onchange="drawTable(info);">
@@ -153,6 +159,7 @@
                 		<font size="3px">Information Mode</font></a> &nbsp;&nbsp;&nbsp;
                   		<a class="btn btn-warning btn-large" onclick="drawTable2();">
                   		<font size="3px">Bubble Mode</font></a></center>
+                  		</div>
 		</div>
 		
 			
