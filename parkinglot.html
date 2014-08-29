@@ -169,7 +169,7 @@
 				
 			}*/
 			
-			var map;
+	var map;
       var center;
       // Draw Bubbles and Create Google Maps framework ...
       function buildMap(response){
@@ -181,7 +181,7 @@
                 zoom: 17,
                 maxZoom: 17,
                 minZoom: 15,
-                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
+                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LEFT_CENTER,
                                         position: google.maps.ControlPosition.left_top},
                                         mapTypeId: google.maps.MapTypeId.ROADMAP,
                                         //Turn off the map controls as we will be adding our own later.
@@ -202,34 +202,34 @@
 
             var marker = []; var message = []; var images = [];
             for(var row = 0; row < data.getNumberOfRows(); ++row){
-                    //console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
-                    var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
-                    message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
-                                   "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
-                                   "Student Count= <b>"+data.getValue(row,4)+"</b></center>";
-                    //image[row] = data.getValue(row,3);
-                    var image = 'http://maps.simcoe.ca/EasyMapTutorial/Images/ScreenCaptures/i_gsv.png'
-                    marker[row] = new google.maps.Marker({
-                                  position: point,
-                                  map: map, icon: image 
-                      });
-                    addInfoWindow(marker[row], message[row]);
-                    google.maps.event.trigger(map, "resize");
-                    center = point;
-            }
-            map.setCenter(center);
-      }
-
-      var infoWindow = null;
-      function addInfoWindow(marker, message){
-        //var info = message;
-        var infoWindow = new google.maps.InfoWindow({
-          content: message
-        });
-        google.maps.event.addListener(marker, 'click', function(){
-            infoWindow.open(map,marker);
-        });
-      }
+		                    //console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
+		                    var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
+		                    message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
+		                                   "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
+		                                   "Student Count= <b>"+data.getValue(row,4)+"</b></center>";
+		                    //image[row] = data.getValue(row,3);
+		                    var image = 'http://maps.simcoe.ca/EasyMapTutorial/Images/ScreenCaptures/i_gsv.png'
+		                    marker[row] = new google.maps.Marker({
+		                                  position: point,
+		                                  map: map, icon: image 
+		                      });
+		                    addInfoWindow(marker[row], message[row]);
+		                    google.maps.event.trigger(map, "resize");
+		                    center = point;
+		            }
+		            map.setCenter(center);
+		      }
+		
+		      var infoWindow = null;
+		      function addInfoWindow(marker, message){
+		        //var info = message;
+		        var infoWindow = new google.maps.InfoWindow({
+		          content: message
+		        });
+		        google.maps.event.addListener(marker, 'click', function(){
+		            infoWindow.open(map,marker);
+		        });
+		      }
 		</script>
 	</head>
 	<body>
