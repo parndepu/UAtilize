@@ -173,6 +173,7 @@
       var center;
       // Draw Bubbles and Create Google Maps framework ...
       function buildMap(response){
+      	console.log(response.getMessage());
         var data = response.getDataTable();
 
         map = new google.maps.Map(document.getElementById('map-canvas'), {
