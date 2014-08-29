@@ -133,9 +133,10 @@
 			          });
 			        });
 			        
-			        gvizQuery2.send(initialize)
+			        gvizQuery2.send(buildMap)
 			}
 			
+			/*
 			// Initialize Maps
 			function initialize(response){
 				console.log(response.getMessage());
@@ -166,16 +167,69 @@
 				map.mapTypes.set('map-style',styleMapType);
 				map.setMapTypeId('map-style');
 				
-			}
-			// Async Loading
-			function loadScript(){
-				var script = document.createElement('script');
-				script.type = 'text/javascript';
-				script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&callback=initialize'
-				document.body.appendChild(script);
-			}
+			}*/
+			
+			var map;
+      var center;
+      // Draw Bubbles and Create Google Maps framework ...
+      function buildMap(response){
+        var data = response.getDataTable();
 
-			window.onload = loadScript;
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+
+                center: new google.maps.LatLng(41.076571, -81.514519),
+                zoom: 17,
+                maxZoom: 17,
+                minZoom: 15,
+                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
+                                        position: google.maps.ControlPosition.left_top},
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                        //Turn off the map controls as we will be adding our own later.
+                                        panControl: false,
+                                        mapTypeControl: false,
+                                        streetViewControl: false
+        });
+        var style = [{"featureType":"landscape.natural.landcover","stylers":[{"gamma":0.44},{"hue":"#2bff00"}]},{"featureType":"water","stylers":[{"hue":"#00a1ff"},{"saturation":29},{"gamma":0.74}]},{"featureType":"landscape.natural.terrain","stylers":[{"hue":"#00ff00"},{"saturation":54},{"lightness":-51},{"gamma":0.4}]},{"featureType":"transit.line","stylers":[{"gamma":0.27},{"hue":"#0077ff"},{"saturation":-91},{"lightness":36}]},{"featureType":"landscape.man_made","stylers":[{"saturation":10},{"lightness":-23},{"hue":"#0099ff"},{"gamma":0.71}]},{"featureType":"poi.business","stylers":[{"hue":"#0055ff"},{"saturation":9},{"lightness":-46},{"gamma":1.05}]},{"featureType":"administrative.country","stylers":[{"gamma":0.99}]},{"featureType":"administrative.province","stylers":[{"lightness":36},{"saturation":-54},{"gamma":0.76}]},{"featureType":"administrative.locality","stylers":[{"lightness":33},{"saturation":-61},{"gamma":1.21}]},{"featureType":"administrative.neighborhood","stylers":[{"hue":"#ff0000"},{"gamma":2.44}]},{"featureType":"road.highway.controlled_access","stylers":[{"hue":"#ff0000"},{"lightness":67},{"saturation":-40}]},{"featureType":"road.arterial","stylers":[{"hue":"#ff6600"},{"saturation":52},{"gamma":0.64}]},{"featureType":"road.local","stylers":[{"hue":"#006eff"},{"gamma":0.46},{"saturation":-3},{"lightness":-10}]},{"featureType":"transit.line","stylers":[{"hue":"#0077ff"},{"saturation":-46},{"gamma":0.58}]},{"featureType":"transit.station","stylers":[{"gamma":0.8}]},{"featureType":"transit.station.rail","stylers":[{"hue":"#ff0000"},{"saturation":-45},{"gamma":0.9}]},{"elementType":"labels.text.fill","stylers":[{"gamma":0.58}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"gamma":2.01},{"hue":"#00ffff"},{"lightness":22}]},{"featureType":"transit","stylers":[{"saturation":-87},{"lightness":44},{"gamma":1.98},{"visibility":"off"}]},{"featureType":"poi.business","elementType":"labels.text","stylers":[{"gamma":0.06},{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"hue":"#00aaff"},{"lightness":-6},{"gamma":2.21}]},{"elementType":"labels.text.stroke","stylers":[{"gamma":3.84}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"gamma":9.99}]},{"featureType":"administrative","stylers":[{"gamma":0.01}]}];
+
+            var styledMapType = new google.maps.StyledMapType(style, {
+                            map: map,
+                            name: 'Styled Map'
+            });
+
+            map.mapTypes.set('map-style', styledMapType);
+            map.setMapTypeId('map-style');
+
+
+            var marker = []; var message = []; var images = [];
+            for(var row = 0; row < data.getNumberOfRows(); ++row){
+                    //console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
+                    var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
+                    message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
+                                   "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
+                                   "Student Count= <b>"+data.getValue(row,4)+"</b></center>";
+                    //image[row] = data.getValue(row,3);
+                    var image = 'http://maps.simcoe.ca/EasyMapTutorial/Images/ScreenCaptures/i_gsv.png'
+                    marker[row] = new google.maps.Marker({
+                                  position: point,
+                                  map: map, icon: image 
+                      });
+                    addInfoWindow(marker[row], message[row]);
+                    google.maps.event.trigger(map, "resize");
+                    center = point;
+            }
+            map.setCenter(center);
+      }
+
+      var infoWindow = null;
+      function addInfoWindow(marker, message){
+        //var info = message;
+        var infoWindow = new google.maps.InfoWindow({
+          content: message
+        });
+        google.maps.event.addListener(marker, 'click', function(){
+            infoWindow.open(map,marker);
+        });
+      }
 		</script>
 	</head>
 	<body>
