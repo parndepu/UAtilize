@@ -17,11 +17,10 @@
 				z-index: 0;
 			}
 			#map-canvas{
-				width: 100%;
 				height:100%;
 			}
 			#content{
-				opacity: 0.8;
+				
 				width:500px;
 				position:absolute;
 				z-index: 1;
@@ -76,4 +75,43 @@
 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
 		</div>
 	</body>
+	<script src="./js/jquery-1.7.1.js"></script>
+      	<script src="./js/jquery-ui-1.10.4.custom.js"></script>
+      	<script src="./js/jQDateRangeSlider-min.js"></script>
+      	<script src="./js/jQRangeSlider-min.js"></script>
+
+      	<script>
+	      // JQSliderBar time adapting 
+	      
+	      function TwoDigits(val){ if (val < 10){ return "0" + val;} return val;}
+	      function set(val){if(val>=13){return val-12;}return val;}
+	      function AMPM(val){if(val<12){return "AM";} return "PM";}
+	      
+	      starttime = new Date(2014, 0, 1,0);
+	      endtime = new Date(2014, 0,1,23,59,59);
+	     
+	      $("#slider").dateRangeSlider({ bounds: {min:starttime, max:endtime}, 
+	      defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)},
+	      
+	      arrows: true,
+	      formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
+	      step:{minutes: 1}});
+	
+	      $('#slider').on("userValuesChanged",function (e, data){
+	        var minHour = data.values.min.getHours(),
+	        minMinutes = data.values.min.getMinutes(),
+	        maxHour = data.values.max.getHours(),
+	        maxMinutes = data.values.max.getMinutes(),
+	        value1 = set(minHour),
+	        value2 = set(maxHour)
+	
+	        finalMin = " " + (minHour < 10 ? "0" + value1 : value1) + ":" + (minMinutes < 10 ? "0" + minMinutes : minMinutes) +" "+AMPM(minHour),
+	        finalMax = " " + (maxHour < 10 ? "0" + value2 : value2) + ":" + (maxMinutes < 10 ? "0" + maxMinutes : maxMinutes) +" "+AMPM(maxHour);
+	        jQuery("#Start").val(finalMin)
+	        jQuery("#End").val(finalMax); });
+	      
+	      $("#slider").on("userValuesChanged", function(e, data){
+	          drawTable();
+	      });
+      	</script>
 </html>
