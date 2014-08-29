@@ -263,7 +263,7 @@
 	      
 	      arrows: true,
 	      formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
-	      step:{minutes: 1}});
+	      step:{minutes: 10}});
 	
 	      $('#slider').on("userValuesChanged",function (e, data){
 	        var minHour = data.values.min.getHours(),
