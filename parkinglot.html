@@ -82,14 +82,14 @@
 			}
 			
 			function QueryTotalCars(){
-				console.log("StartQuery5 !!!");
+				console.log("test !!!");
 				
-				var queryRequest = "SELECT LotName as Lot_Name"+
+				var queryRequest = "SELECT LotName as 'Lot Name',Days,Time,TotalCars"+
 				" FROM 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre";
 				
 				var dayTime = document.getElementById('daySelector').value;
 				var EndingTime = document.getElementById('End').value;
-				/*
+				
 				if(dayTime){
 					if(!EndingTime){
 						queryRequest += " WHERE Days = '"+ dayTime + "'";
@@ -104,7 +104,7 @@
 					}else{
 						queryRequest += " AND Time = '"+ EndingTime + "'";
 					}
-				}*/
+				}
 				
 				//queryRequest += " GROUP BY 'LotName' ";
 				
