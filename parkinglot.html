@@ -129,7 +129,7 @@
 		
 		<div id="content">
 			<label><b>&nbsp;&nbsp;Select Days: </b></label>
-                        	<select class="selectpicker" onchange="drawTable(info);">
+                        	<select id="daySelector" class="form-control" onchange="drawTable(info);">
                               		<option value=""></option>
                               		<option value="Sun">Sunday</option>
                               		<option value="Mon">Monday</option>
@@ -186,10 +186,5 @@
 	          drawTable();
 	      });
 	      
-	      $('.selectpicker').selectpicker();
-	      $('.selectpicker').selectpicker({
-		      style: 'btn-info',
-		      size: 4
-		  });
       	</script>
 </html>
