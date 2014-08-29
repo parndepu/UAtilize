@@ -43,7 +43,7 @@
 				z-index: 1;
 				top:0;
 				left: 0;
-				background:#CEECF5;
+				background:#0B243B;
 				border: 4px solid black;
 				padding:20px;
 			}
@@ -138,9 +138,10 @@
 	      	</nav>
 	      	
 		<div id="map-container">
-			<div style="background-color:#CEECF5;">
+			<div style="background-color:#0B243B;">
 			<br>	
 				<center>
+				<font color="white">
 				<font size="3px"><b>Showcase: </b></font>
 				
 				<!--Select Visualization Mode-->
@@ -148,6 +149,7 @@
                 		<font size="3px">Information Mode</font></a> &nbsp;&nbsp;&nbsp;
                   		<a class="btn btn-primary btn-large" onclick="drawTable2();">
                   		<font size="3px">Bubble Mode</font></a></center>
+                  		</font>
 			<br>
 			<b><font size="2px"><div id="slider"></div></font></b>
 			</div>
@@ -156,6 +158,7 @@
 		</div>
 		<div id="side-layout">
 				<!--Select Days-->
+				<font color="white">
 				<label><b>&nbsp;&nbsp;Select Days: </b></label>
                         	<select id="daySelector" class="form-control" onchange="drawTable(info);">
                               		<option value=""></option>
@@ -174,6 +177,7 @@
                   		<label><b>&nbsp;&nbsp;Cars Entered Until:</b></label>
                 		<input type="text" id="End" class="form-control" disabled>
                 		<br>
+                		</font>
                 </div>
 		<div id="content">
 				<center>
