@@ -91,7 +91,7 @@
 				var queryRequest = "SELECT LotName as 'Lot Name',Days,Time as 'At',TotalCars"+
 				" FROM 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre";
 				
-				var queryRequest2 = "SELECT Latitude,Longitude,LotNumber,LotName,Days,SUM(CarsEntered) as Enter"+
+				var queryRequest2 = "SELECT Latitude,Longitude,LotNumber,LotName,Days,SUM(CarsEntered) as Enter,SUM(CarsExited) as Exit"+
 				" FROM 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre";
 				
 				var dayTime = document.getElementById('daySelector').value;
@@ -175,8 +175,6 @@
       // Draw Bubbles and Create Google Maps framework ...
       function buildMap(response){
       	console.log(response.getMessage());
-      	
-        var data = response.getDataTable();
 
         map = new google.maps.Map(document.getElementById('map-canvas'), {
 
@@ -206,8 +204,8 @@
         for(var row = 0; row < data.getNumberOfRows(); ++row){
   
 		var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
-		message[row] = "<center>"+data.getValue(row,2)+" "+data.getValue(row,3)+" "+
-		data.getValue(row,4)+" "+data.getValue(row,5)+"</center>";
+		message[row] = "<center>"+data.getValue(row,2)+"<br>"+data.getValue(row,3)+"<br>"+
+		data.getValue(row,4)+"<br>"+data.getValue(row,5)+"<br>"+data.getValue(row,6)+"</center>";
 		//image[row] = data.getValue(row,3);
 		var image = 'https://www.crd.bc.ca/images/default-source/parks/icons/parking.png?sfvrsn=2'
 		marker[row] = new google.maps.Marker({
