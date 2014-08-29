@@ -47,7 +47,16 @@
 			function initialize(){
 				var mapOptions = {
 					zoom:17,
+					maxZoom: 17,
+					minZoom: 14,
+					zoomControlOptions:{
+						style: goolge.maps.ZoomControlStyle.LARGE,
+						position:google.maps.ControlPosition.center
+					},
 					// Set the main position with Lat && Lng Values
+					panControl:false,
+					mapTypeControl:false,
+					streetViewControl:false,
 					center: new google.maps.LatLng(41.0768432,-81.5052748)
 				};
 
