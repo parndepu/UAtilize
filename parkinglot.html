@@ -70,6 +70,53 @@
 		</style>
 	
 		<script>
+			// Table id: 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre
+			google.load('visualization', '1', { packages: ['table'] });
+		      	google.load('visualization', '1', { packages: ['corechart'] });
+		      
+		      	google.setOnLoadCallback(QueryTotalCars);
+			
+			// Start Request Query
+			function requestQuery(){
+				
+			}
+			
+			function QueryTotalCars(){
+				var queryRequest = "SELECT LotName as 'Lot Name', LotNumber as 'Lot Number', TotalCars as 'Total Cars', Time"+
+				"FORM 1X92rbjZCnmAlj3YGsVK9jfUylA1ufLjIGYfKmrre";
+				
+				var dayTime = document.getElementById('daySelector').value;
+				var EndingTime = document.getElementById('End').value;
+				
+				if(dayTime){
+					if(!EndingTime){
+						queryRequest += "WHERE Days = '"+ dayTime + "'";
+					}else{
+						queryRequest += "AND Days = '"+ dayTime + "'"; 
+					}
+				}
+				
+				if(EndingTime){
+					if(!dayTime){
+						queryRequest += "WHERE Time = '"+ EndingTime + "'" 
+					}else{
+						queryRequest += "AND Time = '"+ EndingTime +"'";
+					}
+				}
+				
+				var encodeQuery = encodeURIComponent(queryRequest);
+				var gvizQuery = new google.visualization.Query(
+				'https://www.google.com/fusiontables/gvizdata?tq=' + encodeQuery);
+				
+				gvizQuery.send(function(response) {
+			          var table = new google.visualization.Table(
+			              document.getElementById('visualization'));
+			          table.draw(response.getDataTable(), {
+			            showRowNumber: true
+			          });
+			        });
+			}
+			
 			// Initialize Maps
 			function initialize(){
 				var mapOptions = {
@@ -145,9 +192,9 @@
 				<font size="3px"><b>Showcase:&nbsp;&nbsp;</b></font>
 				
 				<!--Select Visualization Mode-->
-                  		<a class="btn btn-primary btn-large" onclick="drawTable();">
+                  		<a class="btn btn-primary btn-large" onclick="requestQuery();">
                 		<font size="3px">Information Mode</font></a> &nbsp;&nbsp;&nbsp;
-                  		<a class="btn btn-primary btn-large" onclick="drawTable2();">
+                  		<a class="btn btn-primary btn-large" onclick="requestQuery();">
                   		<font size="3px">Bubble Mode</font></a></center>
                   		</font>
 			<br>
@@ -160,7 +207,7 @@
 				<!--Select Days-->
 				<font color="white">
 				<label><b>&nbsp;&nbsp;Select Days: </b></label>
-                        	<select id="daySelector" class="form-control" onchange="drawTable(info);">
+                        	<select id="daySelector" class="form-control" onchange="QueryTotalCars(info);">
                               		<option value=""></option>
                               		<option value="Sun">Sunday</option>
                               		<option value="Mon">Monday</option>
@@ -183,6 +230,7 @@
 				<center>
 					<font size="3px"><label><b>Analysis Information</b></label></font>
 				</center>
+				<div id="visualization" style="width:100%;height:100%;display:inline-block;"></div>
 				were ranked No. 1 in the second-tier Football Championship Subdivision (FCS), of which they were the defending champions. Games between FBS and FCS teams typically result in lopsided victories for the FBS team, and the game was not expected to be an exception. However, in an upset hailed as one of the greatest in college football history, the Mountaineers won 34–32 (scoreboard pictured), blocking a potentially game-winning field goal attempt by Michigan in the waning seconds to secure their win. The Mountaineers became the first FCS team to defeat a ranked FBS team, while the Wolverines became the first top-five team to drop out of the polls as the result of a single game. The game received a large amount of coverage in American sports media, and both teams went on to have successful seasons, with Appalachian State winning the FCS championship and Michigan winning a bowl game
 		</div>
 		
@@ -225,7 +273,7 @@
 	        jQuery("#End").val(finalMax); });
 	      
 	      $("#slider").on("userValuesChanged", function(e, data){
-	          drawTable();
+	          QueryTotalCars();
 	      });
 	      
       	</script>
