@@ -183,8 +183,8 @@
                 zoom: 17,
                 maxZoom: 17,
                 minZoom: 15,
-                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LEFT_CENTER,
-                                        position: google.maps.ControlPosition.left_top},
+                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
+                                        position: google.maps.ControlPosition.LEFT_CENTER},
                                         mapTypeId: google.maps.MapTypeId.ROADMAP,
                                         //Turn off the map controls as we will be adding our own later.
                                         panControl: false,
@@ -210,7 +210,7 @@
 		                                   "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
 		                                   "Student Count= <b>"+data.getValue(row,4)+"</b></center>";
 		                    //image[row] = data.getValue(row,3);
-		                    var image = 'http://maps.simcoe.ca/EasyMapTutorial/Images/ScreenCaptures/i_gsv.png'
+		                    var image = 'https://www.crd.bc.ca/images/default-source/parks/icons/parking.png?sfvrsn=2'
 		                    marker[row] = new google.maps.Marker({
 		                                  position: point,
 		                                  map: map, icon: image 
