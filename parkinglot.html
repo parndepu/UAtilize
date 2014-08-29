@@ -91,19 +91,21 @@
 				
 				if(dayTime){
 					if(!EndingTime){
-						queryRequest += "WHERE Days = '"+ dayTime + "'";
+						queryRequest += " WHERE Days = '"+ dayTime + "'";
 					}else{
-						queryRequest += "AND Days = '"+ dayTime + "'"; 
+						queryRequest += " AND Days = '"+ dayTime + "'"; 
 					}
 				}
 				
 				if(EndingTime){
 					if(!dayTime){
-						queryRequest += "WHERE Time = '"+ EndingTime + "'" 
+						queryRequest += " WHERE Time = '"+ EndingTime + "'";
 					}else{
-						queryRequest += "AND Time = '"+ EndingTime + "'";
+						queryRequest += " AND Time = '"+ EndingTime + "'";
 					}
 				}
+				
+				var queryRequest += " GROUP BY LotName ";
 				
 				var encodeQuery = encodeURIComponent(queryRequest);
 				var gvizQuery = new google.visualization.Query(
