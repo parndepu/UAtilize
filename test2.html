@@ -445,6 +445,7 @@
         var building;
         var imgURL;
         var buildingName;
+        marketQuery += " GROUP BY 'Location','Descriptive name'";
         getQuery.send(function(response){ 
                 imgURL = './img/Transaction_Header.jpg'
                 var marketMatch = response.getDataTable();
