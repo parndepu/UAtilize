@@ -445,7 +445,9 @@
         var building;
         var imgURL;
         var buildingName;
-        marketQuery += " GROUP BY 'Location','Descriptive name'";
+        
+        
+        
         getQuery.send(function(response){ 
                 imgURL = './img/Transaction_Header.jpg'
                 var marketMatch = response.getDataTable();
@@ -479,7 +481,7 @@
                 for(var i=0;i<marketMatch.getNumberOfRows();i++){
                   for(var j=0;j<data.getNumberOfRows();j++){
                     if(marketMatch.getValue(i,0) == data.getValue(j,0)){
-                      console.log(marketMatch.getValue(i,0)+" = "+data.getValue(j,1));
+                      //console.log(marketMatch.getValue(i,0)+" = "+data.getValue(j,1));
                       message += "<tr><td><b>&nbsp;"+marketMatch.getValue(i,1)+"&nbsp;&nbsp;</b></td><td>&nbsp;"+marketMatch.getValue(i,0)+"</td><td>&nbsp;"+marketMatch.getValue(i,2)+"</td><td><b><font color='red'>&nbsp;$ "+roundUp(data.getValue(j,1))+"</font></b></td></tr>";
                     }
                   }
@@ -499,8 +501,6 @@
                         map.setCenter(center);
                 });
         });
-  
-
       }
 
       function roundUp(value) {
