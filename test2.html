@@ -480,9 +480,9 @@
                 var message = "<center><font size='3px'><b>"+buildingName+"</b></font><br><img src='"+imgURL+"' width='250' height='100'><br><table border='2'><tr><th></center><center>Stores</center></th><th><center>Code</center></th><th><center>Description</center></th><th><center>Total Amount</center></th></tr>";
                 
                 var total = 0;
-                for(var i=0;i<marketMatch.getNumberOfRows();i++){
+                for(var i=1;i<marketMatch.getNumberOfRows();i++){
                   for(var j=0;j<data.getNumberOfRows();j++){
-                    if(marketMatch.getValue(i,0) == data.getValue(j,0)){
+                    if(marketMatch.getValue(i-1,0) == data.getValue(j,0)){
                       //console.log(marketMatch.getValue(i,0)+" = "+data.getValue(j,1));
                       total = data.getValue(j,1);
                       if(marketMatch.getValue(i,1) == marketMatch.getValue(i-1,1)){
