@@ -478,14 +478,24 @@
                 //var imgURL = 'http://sae.solutionsguide.com/images/vendor_logos/logo-ua-lg_1401193544.jpg';
                 //var imgURL = 'http://maps.googleapis.com/maps/api/streetview?size=1240x800&location='+lat+','+lng;
                 var message = "<center><font size='3px'><b>"+buildingName+"</b></font><br><img src='"+imgURL+"' width='250' height='100'><br><table border='2'><tr><th></center><center>Stores</center></th><th><center>Code</center></th><th><center>Description</center></th><th><center>Total Amount</center></th></tr>";
+                
+                var total = 0;
                 for(var i=0;i<marketMatch.getNumberOfRows();i++){
                   for(var j=0;j<data.getNumberOfRows();j++){
                     if(marketMatch.getValue(i,0) == data.getValue(j,0)){
                       //console.log(marketMatch.getValue(i,0)+" = "+data.getValue(j,1));
-                      message += "<tr><td><b>&nbsp;"+marketMatch.getValue(i,1)+"&nbsp;&nbsp;</b></td><td>&nbsp;"+marketMatch.getValue(i,0)+"</td><td>&nbsp;"+marketMatch.getValue(i,2)+"</td><td><b><font color='red'>&nbsp;$ "+roundUp(data.getValue(j,1))+"</font></b></td></tr>";
+                      total = data.getValue(j,1);
+                      if(marketMatch.getValue(i,1) == marketMatch.getValue(i-1,1)){
+                          total+=data.getValue(j-1,1);
+                          message += "<tr><td><b>&nbsp;"+marketMatch.getValue(i,1)+"&nbsp;&nbsp;</b></td><td>&nbsp;"+marketMatch.getValue(i,0)+"</td><td>&nbsp;"+marketMatch.getValue(i,2)+"</td><td><b><font color='red'>&nbsp;$ "+roundUp(total)+"</font></b></td></tr>";
+                      }else{
+                        message += "<tr><td><b>&nbsp;"+marketMatch.getValue(i,1)+"&nbsp;&nbsp;</b></td><td>&nbsp;"+marketMatch.getValue(i,0)+"</td><td>&nbsp;"+marketMatch.getValue(i,2)+"</td><td><b><font color='red'>&nbsp;$ "+roundUp(data.getValue(j,1))+"</font></b></td></tr>";
+                      }
+      
                     }
                   }
                 }
+                
                 message +="</table></center>";
                 //var infoWindow = null;
                 google.maps.event.addListener(marker, 'click', function(){
