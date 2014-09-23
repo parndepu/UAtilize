@@ -86,7 +86,7 @@
         // GROUP BY Building name
         query += " GROUP BY 'Name'";
         allquery += " GROUP BY 'Location'";
-        allquery += "ORDER BY SUM(Amount) desc"
+        allquery += " ORDER BY SUM(Amount) desc";
         query += " ORDER BY SUM(Amount) desc limit 10";
 
         var queryText = encodeURIComponent(query);
