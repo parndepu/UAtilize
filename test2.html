@@ -342,7 +342,7 @@
                 maxZoom: 17,
                 minZoom: 15,
                 zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
-                                        position: google.maps.ControlPosition.left_top},
+                                        position: google.maps.ControlPosition.LEFT_CENTER},
                                         mapTypeId: google.maps.MapTypeId.ROADMAP,
                                         //Turn off the map controls as we will be adding our own later.
                                         panControl: false,
@@ -405,6 +405,7 @@
           var styledMapType = new google.maps.StyledMapType(style, {
                             map: map,
                             name: 'Styled Map'
+                            
           });
 
             map.mapTypes.set('map-style', styledMapType);
