@@ -53,7 +53,7 @@
 
         var query = "SELECT Name as Store, SUM(Amount) as TotalAmount"+" FROM 170n1Gk5K2g3mNWFeQlBC3oitD2tvgwkyDkfIPGrz";
 
-        var allquery = "SELECT Name as Store, SUM(Amount) as TotalAmount"+" FROM 170n1Gk5K2g3mNWFeQlBC3oitD2tvgwkyDkfIPGrz";
+        var allquery = "SELECT Location as Store, SUM(Amount) as TotalAmount"+" FROM 170n1Gk5K2g3mNWFeQlBC3oitD2tvgwkyDkfIPGrz";
 
         // Hours Variables:
         var Start1 = document.getElementById('Start1').value;
@@ -85,7 +85,7 @@
 
         // GROUP BY Building name
         query += " GROUP BY 'Name'";
-        allquery += " GROUP BY 'Name'";
+        allquery += " GROUP BY 'Location'";
         allquery += "ORDER BY SUM(Amount) desc"
         query += " ORDER BY SUM(Amount) desc limit 10";
 
@@ -437,7 +437,9 @@
       var infoWindow = null;
       function addInfoWindow(data,marker,lat,lng){
         // (Latitude,Longitude)
-        var marketQuery = "SELECT 'Reader','Location','Descriptive name' FROM 1GgeMGETQJh63K2JiTGhCkpg9MEb41nKuBLNKRgbK WHERE Latitude='"+lat+"' AND Longitude ='"+lng+"'";
+        var marketQuery = "SELECT 'Location','Descriptive name' FROM 1GgeMGETQJh63K2JiTGhCkpg9MEb41nKuBLNKRgbK WHERE Latitude='"+lat+"' AND Longitude ='"+lng+"'";
+        
+        marketQuery += " GROUP BY 'Location','Descriptivename'";
         var querytxt = encodeURIComponent(marketQuery);
         //var amount; 
         var getQuery = new google.visualization.Query(
@@ -445,7 +447,6 @@
         var building;
         var imgURL;
         var buildingName;
-        
         
         
         getQuery.send(function(response){ 
@@ -477,21 +478,14 @@
                 }
                 //var imgURL = 'http://sae.solutionsguide.com/images/vendor_logos/logo-ua-lg_1401193544.jpg';
                 //var imgURL = 'http://maps.googleapis.com/maps/api/streetview?size=1240x800&location='+lat+','+lng;
-                var message = "<center><font size='3px'><b>"+buildingName+"</b></font><br><img src='"+imgURL+"' width='250' height='100'><br><table border='2'><tr><th></center><center>Stores</center></th><th><center>Code</center></th><th><center>Description</center></th><th><center>Total Amount</center></th></tr>";
+                var message = "<center><font size='3px'><b>"+buildingName+"</b></font><br><img src='"+imgURL+"' width='250' height='100'><br><table border='2'><tr><th></center><center>Stores</center></th><th><center>Description</center></th><th><center>Total Amount</center></th></tr>";
                 
-                var total = 0;
-                for(var i=1;i<marketMatch.getNumberOfRows();i++){
+                
+                for(var i=0;i<marketMatch.getNumberOfRows();i++){
                   for(var j=0;j<data.getNumberOfRows();j++){
-                    if(marketMatch.getValue(i-1,0) == data.getValue(j,0)){
+                    if(marketMatch.getValue(i,0) == data.getValue(j,0)){
                       //console.log(marketMatch.getValue(i,0)+" = "+data.getValue(j,1));
-                      total = data.getValue(j,1);
-                      if(marketMatch.getValue(i,1) == marketMatch.getValue(i-1,1)){
-                          total+=data.getValue(j-1,1);
-                          message += "<tr><td><b>&nbsp;"+marketMatch.getValue(i,1)+"&nbsp;&nbsp;</b></td><td>&nbsp;"+marketMatch.getValue(i,0)+"</td><td>&nbsp;"+marketMatch.getValue(i,2)+"</td><td><b><font color='red'>&nbsp;$ "+roundUp(total)+"</font></b></td></tr>";
-                      }else{
-                        message += "<tr><td><b>&nbsp;"+marketMatch.getValue(i,1)+"&nbsp;&nbsp;</b></td><td>&nbsp;"+marketMatch.getValue(i,0)+"</td><td>&nbsp;"+marketMatch.getValue(i,2)+"</td><td><b><font color='red'>&nbsp;$ "+roundUp(data.getValue(j,1))+"</font></b></td></tr>";
-                      }
-      
+                      message += "<tr><td><b>&nbsp;"+marketMatch.getValue(i,0)+"&nbsp;&nbsp;</b></td><td>&nbsp;"+marketMatch.getValue(i,1)+"</td><td><b><font color='red'>&nbsp;$ "+roundUp(data.getValue(j,1))+"</font></b></td></tr>";
                     }
                   }
                 }
