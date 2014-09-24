@@ -118,7 +118,7 @@
           var allData = response.getDataTable();
           var data = new google.visualization.DataTable();
           data.addColumn('string','Vendors Code');
-          data.addColumn('string','Salary');
+          data.addColumn('string','Total Amount');
           for(var i=0;i<allData.getNumberOfRows();++i){
                   data.addRow([allData.getValue(i,0),roundUp(allData.getValue(i,1))]);
           }
@@ -560,7 +560,7 @@
               <div class="collapse navbar-collapse" id="mobile-connection">
                     <ul class="nav navbar-nav navbar-left">
                           <li><a href="./test.html"><b><font size="4px">Classroom</font></b></a></li>
-                          <li class="active"><a href="./test2.html"><b><font size="4px">Zips Card</font></b></a></li>
+                          <li class="active"><a href="./test2.html"><b><font size="4px">Zip Card</font></b></a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                           <li><a href="./feedback"><b><font size="4px">Feedback</font></b></a></li>
