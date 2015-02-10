@@ -100,8 +100,8 @@
         Query.send(initialize);
       }
       
-      function initialize() {
-        //var data = response.getDataTable();
+      function initialize(response) {
+        var data = response.getDataTable();
         var mapOptions = {
           center: { lat: -34.397, lng: 150.644},
           zoom: 8
