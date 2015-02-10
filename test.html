@@ -126,7 +126,15 @@
       // Draw Bubbles and Create Google Maps framework ...
       function buildMap(response){
         var data = response.getDataTable();
-
+        var mapOptions = {
+          center: { lat: -34.397, lng: 150.644},
+          zoom: 8
+        };
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+        /*
         map = new google.maps.Map(document.getElementById('map-canvas'), {
 
                 center: new google.maps.LatLng(41.076571, -81.514519),
@@ -204,7 +212,7 @@
             map.setMapTypeId('map-style');
             // edit
             google.maps.event.trigger(map, "resize");
-
+          
             var marker = []; var message = []; var images = [];
             for(var row = 0; row < data.getNumberOfRows(); ++row){
                     //console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
@@ -234,7 +242,7 @@
         });
         google.maps.event.addListener(marker, 'click', function(){
             infoWindow.open(map,marker);
-        });
+        });*/
       }
 
        function drawTable2() {
