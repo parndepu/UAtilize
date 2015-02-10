@@ -199,7 +199,8 @@
 
             map.mapTypes.set('map-style', styledMapType);
             map.setMapTypeId('map-style');
-
+            // edit
+            google.maps.event.trigger(map, "resize");
 
             var marker = []; var message = []; var images = [];
             for(var row = 0; row < data.getNumberOfRows(); ++row){
