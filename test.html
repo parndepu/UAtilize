@@ -1,13 +1,19 @@
+
 <!DOCTYPE html>
+<!--
+  Copyright(c) 2014 Suphanut Jamonnak, Dr.En Cheng
+  Data Integration Spring 2014 - UAtilize Project
+-->
 <html>
   <head>
-    <style type="text/css">
-      #map-canvas { width:550px; height:500px; position: fixed;}
-      .layer-wizard-search-label { font-family: sans-serif };
-      #content{
-                  font-family: Helvetica;
-                  font-size: 11px;
-      }
+    <style>
+    #map-canvas { width:550px; height:500px; position: fixed; }
+    .layer-wizard-search-label { font-family: sans-serif };
+    #content{
+      font-family: Helvetica;
+      font-size: 11px;
+    }
+    
     </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,14 +28,8 @@
     <link rel="stylesheet" href="./css/iThing.css" type="text/css" />
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCUrI0pf3RkNiyaPuKULR5evgEj3UJvpI">
-    </script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript">
-      google.load('visualization', '1', { packages: ['table'] });
-      google.load('visualization', '1', { packages: ['corechart'] });
-      
-      google.setOnLoadCallback(drawTable);
       google.load('visualization', '1', { packages: ['table'] });
       google.load('visualization', '1', { packages: ['corechart'] });
       
@@ -97,22 +97,369 @@
           });
         });
         // Send the query data to build Google Maps
-        Query.send(initialize);
+        Query.send(function(response)){
+                  var data = response.getDataTable();
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+                center: new google.maps.LatLng(41.076571, -81.514519),
+                zoom: 17,
+                maxZoom: 17,
+                minZoom: 15,
+                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
+                                        position: google.maps.ControlPosition.left_top},
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                        //Turn off the map controls as we will be adding our own later.
+                                        panControl: false,
+                                        mapTypeControl: false,
+                                        streetViewControl: false
+        });
+        var style = [{
+          "featureType": "landscape.man_made","elementType":"geometry.fill",
+          "stylers": [{ "hue": "#ff0011" },{ "saturation": 100 },{ "lightness": -14 },{ "gamma": 0.22 }]},
+          {"featureType": "landscape.man_made","elementType": "geometry.stroke",
+          "stylers": [{ "color": "#000000" },{ "weight": 1.4 }]},
+          {"featureType": "landscape.man_made","elementType": "labels.text",
+          "stylers": [{ "visibility": "off" }]},
+          {"featureType": "landscape.natural.terrain","elementType": "labels.text",
+          "stylers": [{ "visibility": "off" }]},
+          {"featureType": "poi","elementType": "geometry",
+          "stylers": [{ "color": "#0B3B2E" }]},
+          {"featureType": "poi.attraction","elementType": "geometry.fill",
+          "stylers": [{ "color": "#ff8080" },{ "visibility": "off" }]},
+          {"featureType": "poi.business","elementType": "labels.text.fill",
+          "stylers": [{ "color": "#ffffff" }]},
+          {"featureType": "poi.business","elementType":"labels.text.stroke",
+          "stylers": [{ "color": "#000000" },{ "weight": 4 }]},
+          {"featureType": "poi.medical","stylers": [{ "visibility": "off" }]},
+          {"featureType": "poi.park","stylers": [{ "visibility": "off" }]},
+          {"featureType": "poi.place_of_worship","stylers": [{ "visibility": "off" }]},
+          {"featureType": "poi.school","elementType": "geometry.fill",
+          "stylers": [{ "color": "#088A68" }]},
+          {"featureType": "poi","elementType": "labels.text.fill",
+          "stylers": [{ "color": "#ffffff" },{ "weight": 0.1 }]},
+          {"featureType": "poi","elementType": "labels.text.stroke",
+          "stylers": [{ "color": "#000000" },{ "weight": 5.5 }]},
+          {"featureType": "poi.sports_complex","elementType": "labels.text.fill",
+          "stylers": [{ "hue": "#22ff00" },{ "color": "#ffffff" }]},
+          {"featureType": "poi.sports_complex","elementType": "labels.text.stroke",
+          "stylers": [{ "color": "#000000" }]},
+          {"featureType": "road.highway","elementType": "geometry.fill",
+          "stylers": [{ "color": "#585858" }]},
+          {"featureType": "road.highway","elementType": "geometry.stroke",
+          "stylers": [{ "weight": 2.8 },{ "color": "#000000" }]},
+          {"featureType": "road.arterial","elementType": "geometry.fill",
+          "stylers": [{ "color": "#1C1C1C" }]},
+          {"featureType": "road.arterial","elementType": "geometry.stroke",
+          "stylers": [{ "color": "#000000" },{ "weight": 2.5 }]},
+          {"featureType": "road.arterial","elementType": "labels.text.fill",
+          "stylers": [{ "color": "#ffffff" },{ "weight": 0.1 }]},
+          {"featureType": "road.arterial","elementType": "labels.text.stroke",
+          "stylers": [{ "visibility": "off" }]},
+          {"featureType": "road.local","elementType": "geometry.fill",
+          "stylers": [{ "color": "#D8D8D8" }]},
+          {"featureType": "road.local","elementType": "geometry.stroke",
+          "stylers": [{ "color": "#000000" },{ "weight": 1.5 }]},
+          {"featureType": "road.local","elementType": "labels.text.fill",
+          "stylers": [{ "color": "#000000" },{ "weight": 3.1 }]},
+          {"featureType": "road.local","elementType": "labels.text.stroke",
+          "stylers": [{ "visibility": "off" }]},
+          {"featureType": "water","elementType": "geometry",
+          "stylers": [{ "color": "#2EFEF7" }]}];
+            var styledMapType = new google.maps.StyledMapType(style, {
+                            map: map,
+                            name: 'Styled Map'
+            });
+            map.mapTypes.set('map-style', styledMapType);
+            map.setMapTypeId('map-style');
+            var marker = []; var message = []; var images = [];
+            for(var row = 0; row < data.getNumberOfRows(); ++row){
+                    //console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
+                    var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
+                    message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
+                                   "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
+                                   "Student Count= <b>"+data.getValue(row,4)+"</b></center>";
+                    //image[row] = data.getValue(row,3);
+                    var image = 'http://maps.simcoe.ca/EasyMapTutorial/Images/ScreenCaptures/i_gsv.png'
+                    marker[row] = new google.maps.Marker({
+                                  position: point,
+                                  map: map, icon: image 
+                      });
+                    addInfoWindow(marker[row], message[row]);
+                    google.maps.event.trigger(map, "resize");
+                    center = point;
+            }
+            map.setCenter(center);
+      }
+      var infoWindow = null;
+      function addInfoWindow(marker, message){
+        //var info = message;
+        var infoWindow = new google.maps.InfoWindow({
+          content: message
+        });
+        google.maps.event.addListener(marker, 'click', function(){
+            infoWindow.open(map,marker);
+        });
+          
+        }
       }
       
-      function initialize(response) {
-        var data = response.getDataTable();
-        var mapOptions = {
-          center: { lat: -34.397, lng: 150.644},
-          zoom: 8
-        };
+      //var map;
+      //var center;
+      // Draw Bubbles and Create Google Maps framework ...
+      function buildMap(response){
         
-        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
       }
-      google.maps.event.addDomListener(window, 'load', initialize);
+       function drawTable2() {
+        var query = "SELECT latitude as Lat, longitude as Lng, Bldg_Name as Building_Name, Bldg_Img, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
+        var query1 = "SELECT 'Bldg_Name' as Building_Name, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
+        var Building = document.getElementById('Building').value;
+        // Days Variables:
+        var daySelector = document.getElementById('daySelector').value;
+        // Hours Variables:
+        var Start = document.getElementById('Start').value;
+        var End = document.getElementById('End').value;
+        if (Building) {
+          query += " WHERE Bldg_Name = '" + Building + "'";
+          query1 += " WHERE Bldg_Name = '" + Building + "'";//AND Meeting_Time_Start >= '9:15 AM' AND Meeting_Time_End <= '10:30 AM'";
+        }
+        if(daySelector){
+          if(!Building){
+            query += " WHERE "+ daySelector + " = 'Y'";
+            query1 += " WHERE "+ daySelector + " = 'Y'";
+          }else{
+            query += " AND "+ daySelector + " = 'Y'";
+            query1 += " AND "+ daySelector + " = 'Y'";
+          }
+        }
+        // Adapting Class Hours ...
+        if (Start && End){
+          if(!Building && !daySelector){
+            query += " WHERE Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+            query1 += " WHERE Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+          }else{
+            query += " AND Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+            query1 += " AND Meeting_Time_Start >= '"+ Start +"' AND Meeting_Time_End <='"+ End +"'";
+          }
+        }
+        // GROUP BY Building name
+        query += " GROUP BY 'Bldg_Name', 'latitude', 'longitude', 'Bldg_Img'";
+        query1 += " GROUP BY 'Bldg_Name'";
+        var queryText1 = encodeURIComponent(query1);
+        var queryText = encodeURIComponent(query);
+        var gvizQuery = new google.visualization.Query(
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
+        var gvizQuery2 = new google.visualization.Query(
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
+        // Query for sending to Google Maps framework ...
+        var Query = new google.visualization.Query(
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+        gvizQuery.send(function(response) {
+          var table = new google.visualization.Table(
+              document.getElementById('visualization'));
+          table.draw(response.getDataTable(), {
+            showRowNumber: true
+          });
+        });
+        gvizQuery2.send(function(response) {
+          var chart = new google.visualization.PieChart(
+              document.getElementById('pieChart'));
+          chart.draw(response.getDataTable(), {
+            title: 'Percentages of Student in each Building',
+            width: 500,
+            height: 400,
+            chartArea: {'width': '100%', 'height': '80%'},
+            is3D: true
+          });
+        });
+        // Send the query data to build Google Maps
+        Query.send(bubbleCreator);
+      }
+      function bubbleCreator(response){
+        var data = response.getDataTable();
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+                center: new google.maps.LatLng(41.076571, -81.514519),
+                zoom: 17,
+                maxZoom: 17,
+                minZoom: 15,
+                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
+                                        position: google.maps.ControlPosition.left_top},
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                        //Turn off the map controls as we will be adding our own later.
+                                        panControl: false,
+                                        mapTypeControl: false,
+                                        streetViewControl: false
+        });
+        var style = [{"featureType":"all","elementType":"all","stylers":[{"invert_lightness":true},{"saturation":10},{"lightness":30},{"gamma":0.5},{"hue":"#435158"}]}];
+            var styledMapType = new google.maps.StyledMapType(style, {
+                            map: map,
+                            name: 'Styled Map'
+            });
+            map.mapTypes.set('map-style', styledMapType);
+            map.setMapTypeId('map-style');
+            var marker = []; var message = []; var images = [];
+            for(var row = 0; row < data.getNumberOfRows(); ++row){
+                    //console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
+                    var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
+                    message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
+                                   "<b>Population: "+data.getValue(row,4)+" students</b></center>";
+                    //image[row] = data.getValue(row,3);
+                    var image = 'http://maps.simcoe.ca/EasyMapTutorial/Images/ScreenCaptures/i_gsv.png'
+                    marker[row] = new google.maps.Marker({
+                                  position: point,
+                                  map: map, icon: drawBubbles(data.getValue(row,4)) 
+                      });
+                    addInfoWindow(marker[row], message[row]);
+                    google.maps.event.trigger(map, "resize");
+                    center = point;
+            }
+            map.setCenter(center);
+      }
+      
+      function drawBubbles(magnitude) {
+                return {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  fillColor: '#FFFF00',
+                  fillOpacity: .7,
+                  scale: magnitude/150,
+                  strokeColor: 'black',
+                  strokeWeight: .5
+                };
+      }
+      google.maps.event.addDomListener(window, 'load', buildMap);
+      google.maps.event.addDomListener(window, "resize", function(){
+                  google.maps.event.trigger(map, "resize");
+                  map.setCenter(center);
+      });
     </script>
   </head>
   <body>
-<div id="map-canvas" style="width:100%;"></div>
+      
+       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+              <div class="container-fluid">
+              <!--Brand and toggle get grouped for better mobile display-->
+              <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="mobile-connection">    <span class="sr-only"> Toggle navigation </span>
+                                    <span class="iconbar"></span>
+                                    <span class="iconbar"></span>
+                                    <span class="iconbar"></span>
+                    </button>
+                    <a class="navbar-brand" href="./home.html"><b><font color="yellow" size="6px">UA</font><font size="5px" color="white">tilize</font></b></a>
+              </div>
+              <div class="collapse navbar-collapse" id="mobile-connection">
+                    <ul class="nav navbar-nav navbar-left">
+                          <li class="active"><a href="./test.html"><b><font size="4px">Classroom</font></b></a></li>
+                          <!--<li><a href="./test2.html"><b><font size="4px">Zips Card</font></b></a></li>-->
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                          <li><a href="./feedback.html"><b><font size="4px">Feedback</font></b></a></li>
+                    </ul>
+              </div>
+              </div>
+      </nav><br><br>
+      <center>
+      <div>
+                  <div id="map-canvas" style="width:100%;"></div>
+                  <b><font size="3px"><div id="slider"></div></font></b><br><br>
+                  <label><b>&nbsp;&nbsp;Select Building:</b></label>
+                  <select id="Building" onchange="drawTable();">
+                          <option value="">All Building</option>
+                          <option value="AYER HALL">AYER HALL</option>
+                          <option value="Auburn Science and Engineering Ctr.">Auburn Science and Engineering Ctr.</option>
+                          <option value="Bierce Library">Bierce Library</option>
+                          <option value="Buckingham Building">Buckingham Building</option>
+                          <option value="Business Administration Building">Business Administration Building</option>
+                          <option value="Center For Child Development">Center For Child Development</option>
+                          <option value="College of Arts and Sciences">College of Arts and Sciences</option>
+                          <option value="Crouse Hall">Crouse Hall</option>
+                          <option value="E.J. Thomas Performing Arts Hall">E.J. Thomas Performing Arts Hall</option>
+                          <option value="Folk Hall">Folk Hall</option>
+                          <option value="Goodyear Polymer Center">Goodyear Polymer Center</option>
+                          <option value="Guzzetta Hall">Guzzetta Hall</option>
+                          <option value="James A. Rhodes Health and PE">James A. Rhodes Health and PE</option>
+                          <option value="Knight Chemical Laboratory">Knight Chemical Laboratory</option>
+                          <option value="Kolbe Hall">Kolbe Hall</option>
+                          <option value="Leigh Hall">Leigh Hall</option>
+                          <option value="Louis and Freda Stile Athletic Field House">Louis and Freda Stile Athletic Field House</option>
+                          <option value="McDowell Law Center">McDowell Law Center</option>
+                          <option value="Ocasek Natatorium">Ocasek Natatorium</option>
+                          <option value="Olin Hall">Olin Hall</option>
+                          <option value="Polsky Building">Polsky Building</option>
+                          <option value="Polymer Engineering Academic Center">Polymer Engineering Academic Center</option>
+                          <option value="Schrank Hall (North)">Schrank Hall (North)</option>
+                          <option value="Schrank Hall (South)">Schrank Hall (South)</option>
+                          <option value="Simmons Hall">Simmons Hall</option>
+                          <option value="Student Recreation and Wellness Ctr">Student Recreation and Wellness Ctr</option>
+                          <option value="Student Union">Student Union</option>
+                          <option value="U/A @ Wadsworth High School">U/A @ Wadsworth High School</option>
+                          <option value="West Hall">West Hall</option>
+                          <option value="Whitby Hall">Whitby Hall</option>
+                          <option value="Zook Hall">Zook Hall</option>
+                  </select>
+                  <label><b>&nbsp;&nbsp;Select Days: </b></label>
+                          <select id="daySelector" onchange="drawTable(info);">
+                              <option value=""></option>
+                              <option value="Sun">Sunday</option>
+                              <option value="Mon">Monday</option>
+                              <option value="Tues">Tuesday</option>
+                              <option value="Wed">Wednesday</option>
+                              <option value="Thurs">Thursday</option>
+                              <option value="Fri">Friday</option>
+                              <option value="Sat">Satuarday</option>
+                  </select>
+                  <label><b> &nbsp;&nbsp; Hours Slider: </b></label>
+                  Start Time: <input type="text" id="Start" disabled> 
+                  End Time: <input type="text" id="End" disabled><br><br>
+                  
+                  <center><b>Select Visualization:</b>&nbsp;&nbsp;&nbsp;
+                  <a class="btn btn-primary btn-large" onclick="drawTable();">
+                  <font size="3px">Information Mode</font></a>&nbsp;&nbsp;&nbsp;
+                  <a class="btn btn-warning btn-large" onclick="drawTable2();"><font size="3px">Bubble Mode</font></a></center><br>
+                  <b><center>
+                  <div id="pieChart" style="display:inline-block;"></div>
+                  <div id="visualization" style="width:600px;height:400px;display:inline-block;"></div>
+                  </b></center>
+
+            
+      </div>
+      </font></center>
   </body>
+
+      <script src="./js/jquery-1.7.1.js"></script>
+      <script src="./js/jquery-ui-1.10.4.custom.js"></script>
+      <script src="./js/jQDateRangeSlider-min.js"></script>
+      <script src="./js/jQRangeSlider-min.js"></script>
+
+      <script>
+        // Time Adapter ...
+      
+      function TwoDigits(val){ if (val < 10){ return "0" + val;} return val;}
+      function set(val){if(val>=13){return val-12;}return val;}
+      function AMPM(val){if(val<12){return "AM";} return "PM";}
+      
+      starttime = new Date(2014, 0, 1,0);
+      endtime = new Date(2014, 0,1,23,59,59);
+     
+      $("#slider").dateRangeSlider({ bounds: {min:starttime, max:endtime}, 
+      defaultValues: {min: new Date(2014, 0, 1,8), max: new Date(2014, 0, 1,11)},
+      //range: {min:starttime, max:endtime},
+      arrows: true,
+      formatter: function(value){ var hours = value.getHours(), minutes = value.getMinutes(); return set(TwoDigits(hours)) + ":" + TwoDigits(minutes)+" "+AMPM(hours);}, valueLabels:"change", durationIn:1000, durationOut:1000,
+      step:{minutes: 1}});
+      $('#slider').on("userValuesChanged",function (e, data){
+        var minHour = data.values.min.getHours(),
+        minMinutes = data.values.min.getMinutes(),
+        maxHour = data.values.max.getHours(),
+        maxMinutes = data.values.max.getMinutes(),
+        value1 = set(minHour),
+        value2 = set(maxHour)
+        finalMin = " " + (minHour < 10 ? "0" + value1 : value1) + ":" + (minMinutes < 10 ? "0" + minMinutes : minMinutes) +" "+AMPM(minHour),
+        finalMax = " " + (maxHour < 10 ? "0" + value2 : value2) + ":" + (maxMinutes < 10 ? "0" + maxMinutes : maxMinutes) +" "+AMPM(maxHour);
+        jQuery("#Start").val(finalMin)
+        jQuery("#End").val(finalMax); });
+      
+      $("#slider").on("userValuesChanged", function(e, data){
+          drawTable();
+      });
+      // GitHub Linking Example: http://parndepu.github.io/UAtilize/css/iThing.css
+      // parndepu
+      </script>
 </html>
