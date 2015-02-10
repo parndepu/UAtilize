@@ -132,12 +132,12 @@
                 maxZoom: 17,
                 minZoom: 15,
                 zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
-                                        position: google.maps.ControlPosition.left_top},
+                                        position: google.maps.ControlPosition.LEFT_CENTER},
                                         mapTypeId: google.maps.MapTypeId.ROADMAP,
                                         //Turn off the map controls as we will be adding our own later.
-                                        panControl: true,
-                                        mapTypeControl: true,
-                                        streetViewControl: true
+                                        panControl: false,
+                                        mapTypeControl: false,
+                                        streetViewControl: false
         });
         var style = [{
           "featureType": "landscape.man_made","elementType":"geometry.fill",
@@ -402,7 +402,7 @@
       </nav><br><br><br><br>
       <center>
       
-                  <div id="map-canvas" style="height:100%; width:100%; position: absolute;"></div>
+                  <div id="map-canvas" style=" width:100%;"></div>
                   <b><font size="3px"><div id="slider"></div></font></b><br><br>
                   <label><b>&nbsp;&nbsp;Select Building:</b></label>
                   <select id="Building" onchange="drawTable();">
