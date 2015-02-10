@@ -100,13 +100,26 @@
         Query.send(initialize);
       }
       
-      function initialize() {
+      function initialize(response) {
+        var data = response.getDataTable();
         var mapOptions = {
           center: { lat: -34.397, lng: 150.644},
           zoom: 8
         };
-        var map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
+        
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+                center: new google.maps.LatLng(41.076571, -81.514519),
+                zoom: 17,
+                maxZoom: 17,
+                minZoom: 15,
+                zoomControlOptions:{    style: google.maps.ZoomControlStyle.LARGE,
+                                        position: google.maps.ControlPosition.left_top},
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                        //Turn off the map controls as we will be adding our own later.
+                                        panControl: false,
+                                        mapTypeControl: false,
+                                        streetViewControl: false
+        });
       }
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>
