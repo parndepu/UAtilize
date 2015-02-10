@@ -216,10 +216,11 @@
                                   map: map, icon: image 
                       });
                     addInfoWindow(marker[row], message[row]);
-                    google.maps.event.trigger(map, "resize");
                     center = point;
             }
             map.setCenter(center);
+            //
+            google.maps.event.trigger(map, "resize");
       }
 
       var infoWindow = null;
@@ -351,10 +352,12 @@
                                   map: map, icon: drawBubbles(data.getValue(row,4)) 
                       });
                     addInfoWindow(marker[row], message[row]);
-                    google.maps.event.trigger(map, "resize");
+                    
                     center = point;
             }
             map.setCenter(center);
+            //
+            google.maps.event.trigger(map, "resize");
       }
 
       
@@ -371,8 +374,9 @@
 
       google.maps.event.addDomListener(window, 'load', buildMap);
       google.maps.event.addDomListener(window, "resize", function(){
-                  google.maps.event.trigger(map, "resize");
+                  
                   map.setCenter(center);
+                  google.maps.event.trigger(map, "resize");
       });
 
     </script>
