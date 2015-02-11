@@ -97,8 +97,15 @@
           });
         });
         // Send the query data to build Google Maps
-        Query.send(function(response)){
-                  var data = response.getDataTable();
+        Query.send(buildMap);
+      }
+    
+      
+      //var map;
+      //var center;
+      // Draw Bubbles and Create Google Maps framework ...
+      function buildMap(){
+        //var data = response.getDataTable();
         map = new google.maps.Map(document.getElementById('map-canvas'), {
                 center: new google.maps.LatLng(41.076571, -81.514519),
                 zoom: 17,
@@ -200,12 +207,6 @@
         });
           
         }
-      }
-      
-      //var map;
-      //var center;
-      // Draw Bubbles and Create Google Maps framework ...
-      function buildMap(response){
         
       }
        function drawTable2() {
