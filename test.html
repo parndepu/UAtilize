@@ -180,9 +180,9 @@
             for(var row = 0; row < data.getNumberOfRows(); ++row){
                     //console.log(data.getValue(row,0)+" "+data.getValue(row,1)+" "+data.getValue(row,2)+" "+data.getValue(row,3)+" "+data.getValue(row,4));
                     var point = new google.maps.LatLng(data.getValue(row,0),data.getValue(row,1));
-                    message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
+                    message[row] = "hello";/*"<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
                                    "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
-                                   "Student Count= <b>"+data.getValue(row,4)+"</b></center>";
+                                   "Student Count= <b>"+data.getValue(row,4)+"</b></center>";*/
                     //image[row] = data.getValue(row,3);
                     var image = 'http://maps.simcoe.ca/EasyMapTutorial/Images/ScreenCaptures/i_gsv.png'
                     marker[row] = new google.maps.Marker({
