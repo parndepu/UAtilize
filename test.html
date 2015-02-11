@@ -35,7 +35,7 @@
       
       google.setOnLoadCallback(drawTable);
       function drawTable() {
-        var query = "SELECT 'latitude' as Lat, 'longitude' as Lng,'Bldg_Name', SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
+        var query = "SELECT 'latitude' as Lat, 'longitude' as Lng,'Bldg_Name','Bldg_Img', SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
         var query1 = "SELECT 'Bldg_Name' as Building_Name, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
         var Building = document.getElementById('Building').value;
         // Days Variables:
@@ -67,7 +67,7 @@
           }
         }
         // GROUP BY Building name
-        query += " GROUP BY 'latitude', 'longitude', 'Bldg_Name';
+        query += " GROUP BY 'latitude', 'longitude', 'Bldg_Name', 'Bldg_Img';
         query1 += " GROUP BY 'Bldg_Name'";
         var queryText1 = encodeURIComponent(query1);
         var queryText = encodeURIComponent(query);
