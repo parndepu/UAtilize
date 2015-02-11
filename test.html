@@ -99,13 +99,12 @@
         // Send the query data to build Google Maps
         Query.send(buildMap);
       }
-    
       
-      //var map;
-      //var center;
+      var map;
+      var center;
       // Draw Bubbles and Create Google Maps framework ...
-      function buildMap(){
-        //var data = response.getDataTable();
+      function buildMap(response){
+        var data = response.getDataTable();
         map = new google.maps.Map(document.getElementById('map-canvas'), {
                 center: new google.maps.LatLng(41.076571, -81.514519),
                 zoom: 17,
@@ -205,9 +204,6 @@
         google.maps.event.addListener(marker, 'click', function(){
             infoWindow.open(map,marker);
         });
-          
-        }
-        
       }
        function drawTable2() {
         var query = "SELECT latitude as Lat, longitude as Lng, Bldg_Name as Building_Name, Bldg_Img, SUM(Student_Count) as Student_Count"+" FROM 1oUa_hu9jie_PeOte55TElLs6DSDPUKb2O5mkmtCd";
