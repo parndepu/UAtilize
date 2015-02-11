@@ -77,7 +77,7 @@
             'https://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
         // Query for sending to Google Maps framework ...
         var Query = new google.visualization.Query(
-            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText1);
         gvizQuery.send(function(response) {
           var table = new google.visualization.Table(
               document.getElementById('visualization'));
