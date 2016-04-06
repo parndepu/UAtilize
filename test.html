@@ -184,7 +184,7 @@
                                    "<img src='"+data.getValue(row,3)+"' width='200' height='130'><br>"+
                                    "Student Count= <b>"+data.getValue(row,4)+"</b></center>";
                     //image[row] = data.getValue(row,3);
-                    var image = 'http://icons.iconarchive.com/icons/graphicloads/100-flat-2/128/people-icon.png'
+                    var image = 'https://upload.wikimedia.org/wikipedia/commons/9/93/Map_marker_icon_%E2%80%93_Nicolas_Mollet_%E2%80%93_Male_%E2%80%93_People_%E2%80%93_Classic.png'
                     marker[row] = new google.maps.Marker({
                                   position: point,
                                   map: map, icon: image 
@@ -299,7 +299,7 @@
                     message[row] = "<center><font size='3'><b>"+data.getValue(row,2)+"</font></b><br>"+
                                    "<b>Population: "+data.getValue(row,4)+" students</b></center>";
                     //image[row] = data.getValue(row,3);
-                    var image = 'http://icons.iconarchive.com/icons/graphicloads/100-flat-2/128/people-icon.png'
+                    var image = 'https://upload.wikimedia.org/wikipedia/commons/9/93/Map_marker_icon_%E2%80%93_Nicolas_Mollet_%E2%80%93_Male_%E2%80%93_People_%E2%80%93_Classic.png'
                     marker[row] = new google.maps.Marker({
                                   position: point,
                                   map: map, icon: drawBubbles(data.getValue(row,4)) 
