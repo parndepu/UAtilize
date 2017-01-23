@@ -92,19 +92,19 @@
         var queryText = encodeURIComponent(query);
         var queryText2 = encodeURIComponent(allquery);
         var gvizQuery = new google.visualization.Query(
-            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
         var gvizQuery2 = new google.visualization.Query(
-            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
         // Query for sending to Google Maps framework ...
         var Query = new google.visualization.Query(
-            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
          var Query3 = new google.visualization.Query(
-            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
          var Query4 = new google.visualization.Query(
-            'http://www.google.com/fusiontables/gvizdata?tq=' + queryText2);
+            'https://www.google.com/fusiontables/gvizdata?tq=' + queryText2);
         /*
         var data = response.getDataTable();
                   var markets = [];
@@ -333,7 +333,7 @@
         var storeQuery = "SELECT Latitude as Lat,Longitude as Lng FROM 1GgeMGETQJh63K2JiTGhCkpg9MEb41nKuBLNKRgbK GROUP BY 'Latitude','Longitude'";
         var querytxt = encodeURIComponent(storeQuery);
         var mapQuery = new google.visualization.Query(
-        'http://www.google.com/fusiontables/gvizdata?tq=' + querytxt);
+        'https://www.google.com/fusiontables/gvizdata?tq=' + querytxt);
         
         map = new google.maps.Map(document.getElementById('map-canvas'), {
 
@@ -422,7 +422,7 @@
                         for(var i=0;i<pinData.getNumberOfRows();i++){
                             //console.log(pinData.getValue(i,0)+" "+pinData.getValue(i,1));
                             var point = new google.maps.LatLng(pinData.getValue(i,0),pinData.getValue(i,1));
-                            var image = 'http://maps.google.com/mapfiles/kml/paddle/ylw-circle_maps.png'
+                            var image = 'https://maps.google.com/mapfiles/kml/paddle/ylw-circle_maps.png'
                         
                             markers[i] = new google.maps.Marker({
                                           position: point,
@@ -444,7 +444,7 @@
         var querytxt = encodeURIComponent(marketQuery);
         //var amount; 
         var getQuery = new google.visualization.Query(
-        'http://www.google.com/fusiontables/gvizdata?tq=' + querytxt);
+        'https://www.google.com/fusiontables/gvizdata?tq=' + querytxt);
         var building;
         var imgURL;
         var buildingName;
@@ -537,7 +537,7 @@
       });
 
     </script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript">
     $(window).load(function() {
       $(".loader").fadeOut("slow");
